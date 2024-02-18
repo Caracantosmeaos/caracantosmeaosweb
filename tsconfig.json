@@ -1,0 +1,13 @@
+{
+  "extends": "astro/tsconfigs/base",
+  //"compilerOptions": {
+  //  "jsx": "preserve"
+  //}
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "@astrojs/ts-plugin"
+      },
+    ],
+  }
+}

@@ -1,0 +1,54 @@
+---
+import { isAborted } from 'astro/zod';
+import Mainheader from '../components/Mainheader.astro';
+import Navbar from '../components/Navbar.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	keywords?: string;
+	isindex: boolean;
+}
+
+const { title, isindex, description, keywords } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="dark:bg-base-300">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image" href="/escudo2024.png" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="author" content="Raúl Jiménez 'el_trueno'">
+		<meta name="description" content={description} />
+		{keywords && <meta name="keywords" content={keywords}/>}
+		{!keywords && <meta name="keywords" content={title}/>}
+		<title>{title}</title>
+
+		<meta name="theme-color" content="#fed000" />
+		<meta name="color-scheme" content="dark light" />
+
+		<!-- Facebook Meta Tags -->
+		<meta property="og:type" content="website">
+		<meta property="og:title" content={title}>
+		<meta property="og:description" content={description}>
+		<!-- Twitter Meta Tags -->
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:domain" content="www.caracantosmeaos.club">
+		<meta name="twitter:site" content="@elh_trueno">
+		<meta name="twitter:creator" content="@elh_trueno">
+		<meta name="twitter:title" content={title}>
+		<meta name="twitter:description" content={description}>
+
+		<slot name="metadata"></slot>	
+
+	</head>
+	<body>
+		{isindex && <Mainheader/>}
+		<Navbar isindex={isindex}/>		
+		<main>
+			<slot />
+		</main>
+	</body>
+</html>

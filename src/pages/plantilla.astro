@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PlayersContainer from '../components/player/PlayersContainer.vue'
+---
+
+<Layout title="Caracantosmeaos Club: Plantilla" isindex={false} description='Caracantosmeaos C.F Web oficial: Plantilla' 
+	keywords='fifa, eafc, fifa23, fifa24, eafc24, club, pro, clubespro, proclubs, caracantosmeaos, eltrueno, el_trueno, inicio, plantilla, jugadores'>
+	<meta slot="metadata" property="og:url" content="https://www.caracantosmeaos.club/plantilla"/>
+	<meta slot="metadata" property="og:image" content="https://www.caracantosmeaos.club/escudo_banner_fondo.jpg"/>
+	<meta slot="metadata" name="twitter:url" content="https://www.caracantosmeaos.club/plantilla"/>
+	<meta slot="metadata" name="twitter:image" content="https://www.caracantosmeaos.club/escudo_banner_fondo.jpg"/>
+
+
+	<header class="container mx-auto mb-10">
+		<h1 class="text-primary font-bold text-3xl text-center mt-8 p-8">Nuestra plantilla</h1>
+		<h2 class="font-bold text-2xl text-center">Contamos con una plantilla competitiva, que cree en nuestros valores y lucha por nuestro escudo, ese es nuestro secreto</h2>
+	</header>
+
+	<section >
+		<container class="flex p-8 md:p-12 lg:p-16 justify-center items-center">
+			<PlayersContainer client:visible/>
+			<!--
+			<div class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-center justify-center">
+				<div class="bg-green-300 text-center">a</div>
+				<div class="bg-green-300 text-center">a</div>
+				<div class="bg-green-300 text-center">a</div>
+				<div class="bg-green-300 text-center">a</div>
+				<div class="bg-green-300 text-center">a</div>
+			</div>
+			 -->
+			</container>
+	</section>
+
+</Layout>
+

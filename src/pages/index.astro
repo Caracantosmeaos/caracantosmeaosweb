@@ -1,0 +1,65 @@
+---
+import Indexarticle from '../components/Indexarticle.astro';
+import KitContainer from '../components/KitContainer.astro';
+import Layout from '../layouts/Layout.astro';
+import ClubStats from '../components/ClubStats.vue';
+---
+
+<Layout title="Caracantosmeaos Club" isindex description='Caracantosmeaos C.F Web oficial: Inicio' 
+	keywords='fifa, eafc, fifa23, fifa24, eafc24, club, pro, clubespro, proclubs, caracantosmeaos, eltrueno, el_trueno, inicio, equipaciones, valores'>
+	<meta slot="metadata" property="og:url" content="https://www.caracantosmeaos.club/"/>
+	<meta slot="metadata" property="og:image" content="https://www.caracantosmeaos.club/escudo_banner_fondo.jpg"/>
+	<meta slot="metadata" name="twitter:url" content="https://www.caracantosmeaos.club/"/>
+	<meta slot="metadata" name="twitter:image" content="https://www.caracantosmeaos.club/escudo_banner_fondo.jpg"/>
+
+
+
+	<header class="container mx-auto mb-10">
+		<h2 class="font-bold text-2xl text-center my-8 p-8">EA FC 24 Pro Club y lema bla bla bla bla</h2>
+	</header>
+
+	<section>
+		<header>
+			<h3 class="mt-8 py-8 px-8 md:px-16 ml-8 text-primary font-bold text-4xl text-left" id="equipaciones">Datos, no opiniones</h3>
+		</header>
+		<content>
+			<ClubStats client:visible class="overflow-clip"></ClubStats>
+		</content>
+	</section>
+
+	<section class="overflow-x-clip">
+			<Indexarticle id="origen" reverse={false}, gradientText="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500" imageUrl='/illustrations/friends.svg'>
+				<p slot="title">Origen</p>
+				Un club nacido desde la ambición: Caracantosmeaos nace directamente de la ambición de un grupo de amigos por lograr cosas grandes, nacido en el <strong>corazón de Ávila</strong>, de ahí el escudo con el castillo referenciando a la ciudad amurallada
+			</Indexarticle>
+			<Indexarticle id="objetivo" reverse gradientText="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500" imageUrl='/illustrations/podium.svg'>
+				<p slot="title">Objetivo</p>
+				Nuestro objetivo siempre sera apuntar alto, llegar a la máxima división y conseguir la mejor clasificación en el playoff. 
+				Si no eres el mejor en la cancha trabaja para serlo. Busca mejorar para llegar a lo más alto y sino siempre podrás intentar hacer la mayor cantidad de <strong>entradas criminales</strong> posibles, pero siempre mostrando el respeto que recibas.
+			</Indexarticle>
+			<Indexarticle id="mision" reverse={false} gradientText="bg-gradient-to-r from-green-300 to-purple-400" imageUrl='/illustrations/friends2.svg'>
+				<p slot="title">Misión</p>
+				Nacidos de la <strong>humildad y el esfuerzo</strong>, Caracantosmeaos CF busca ser un referente para todos aquellos que piensan que no pueden, Un modelo de guía para los jugadores en busca de grandiosas metas.
+			</Indexarticle>
+	</section>
+	<section>
+		<header>
+			<h3 class="mt-8 py-8 px-8 md:px-16 ml-8 text-primary font-bold text-4xl text-left" id="equipaciones">Equipaciones</h3>
+		</header>
+		<container class="container min-w-full p-6 md:p-10 lg:p-12 block">
+			<div role="tablist" class="tabs tabs-lifted">
+				<input type="radio" name="kit_tab" role="tab" class="tab text-lg" aria-label="Primera" checked/>
+				<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box dark:shadow shadow-md p-3">
+					<header><h4 class="text-xl font-bold text-center p-2 md:p-4">1º Equipación</h4></header>
+					<KitContainer kit='first'>
+				</div>
+				<input type="radio" name="kit_tab" role="tab" class="tab text-lg" aria-label="Segunda" />
+				<div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box dark:shadow shadow-md p-3">
+					<header><h4 class="text-xl font-bold text-center p-2 md:p-4">2º Equipación</h4></header>
+					<KitContainer kit='second'>
+				</div>
+			</div>
+		</container>
+	</section>
+</Layout>
+
