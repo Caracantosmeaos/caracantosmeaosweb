@@ -15,15 +15,18 @@
                             <li v-for="(value, index) in orderTypes"><a v-on:click="selectedOrder=index" @click="closeDropdown()">{{ value }}</a></li>
                         </ul>
                     </div>
-                    <label class="swap">
-                        <input type="checkbox" v-on:click="handleAscOrder"/>
-                        <svg class="swap-off w-6 h-6"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
-                        </svg>
-                        <svg class="swap-on w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 15 7-7 7 7"/>
-                        </svg>
-                    </label>
+                    <div class="tooltip tooltip-bottom" :data-tip="currentOrderStr">
+                        <label class="swap">
+                            <input type="checkbox" v-on:click="handleAscOrder"/>
+                            <svg class="swap-off w-6 h-6"  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+                            </svg>
+                            <svg class="swap-on w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m5 15 7-7 7 7"/>
+                            </svg>
+                        </label>
+                    </div>
+
                 </div>
             </div>
         </header>
@@ -83,13 +86,9 @@
 
                 <div v-else-if="finalMembers.length>0" class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3  content-center justify-center">
                     <TransitionGroup name="playerlist">
-                        <PlayerField v-for="(member, index) in finalMembers" :key="member.name" :player="member" :index="index" @clickedPlayer="handlePlayerClick(index, member)" 
+                        <PlayerField v-for="(member, index) in finalMembers" :key="member" :player="member" :index="index" @clickedPlayer="handlePlayerClick(index, member)" 
                             :class="{ 
-                                'shadow-xl': activePlayer==index ,
-                                'md:col-start-1': activePlayer==index,
-                                'md:col-end-4': activePlayer==index ,
-                                'row-start-1':  activePlayer==index,
-                                'row-end-auto': activePlayer==index
+                                'shadow-xl': activePlayer==index 
                             }"
                         />
                     </TransitionGroup>
@@ -124,10 +123,12 @@
     const errorText = memberService.getError()
     const hasError:Boolean = (errorText.value=='') ? false : true
 
-    let ascOrder = true
+    let ascOrder = false
+    let currentOrderStr = "Mayor a menor"
 
     function handleAscOrder(){
         ascOrder = !ascOrder
+        currentOrderStr = ascOrder ? "Menor a mayor" : "Mayor a menor" 
         members.value.reverse()
     }
 
@@ -138,23 +139,23 @@
         switch(selectedOrder.value){
             case 0:
                 fmembers.sort((a:ClubMember,b:ClubMember) => (a.gamesPlayed > b.gamesPlayed) ? 1 : ((b.gamesPlayed > a.gamesPlayed) ? -1 : 0))
-                if(ascOrder) fmembers.reverse()
+                if(!ascOrder) fmembers.reverse()
                 break;
             case 1:
                 fmembers.sort((a:ClubMember,b:ClubMember) => (a.goals > b.goals) ? 1 : ((b.goals > a.goals) ? -1 : 0))
-                if(ascOrder) fmembers.reverse()
+                if(!ascOrder) fmembers.reverse()
                 break;
             case 2:
                 fmembers.sort((a:ClubMember,b:ClubMember) => (a.assists > b.assists) ? 1 : ((b.assists > a.assists) ? -1 : 0))
-                if(ascOrder) fmembers.reverse()
+                if(!ascOrder) fmembers.reverse()
                 break;
             case 3:
                 fmembers.sort((a:ClubMember,b:ClubMember) => (a.redCards > b.redCards) ? 1 : ((b.redCards > a.redCards) ? -1 : 0))
-                if(ascOrder) fmembers.reverse()
+                if(!ascOrder) fmembers.reverse()
                 break;
             default:
                 fmembers.sort((a:ClubMember,b:ClubMember) => (a.gamesPlayed > b.gamesPlayed) ? 1 : ((b.gamesPlayed > a.gamesPlayed) ? -1 : 0))
-                if(ascOrder) fmembers.reverse()
+                if(!ascOrder) fmembers.reverse()
         }
     activePlayer.value = -1
         return fmembers
