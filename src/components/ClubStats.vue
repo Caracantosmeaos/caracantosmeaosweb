@@ -110,7 +110,7 @@
 </template>
 
 <script lang="ts" setup>
-    import ClubStatsService from '../services/ClubStatsService';
+    import ClubStatsService from '@services/ClubStatsService';
     import { onBeforeMount, computed, watch, reactive, ref } from 'vue';
     import CountUp from 'vue-countup-v3'
 

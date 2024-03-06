@@ -4,6 +4,14 @@
   //  "jsx": "preserve"
   //}
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@models/*": ["./src/model/*"],
+      "@services/*": ["./src/services/*"]
+    },
     "plugins": [
       {
         "name": "@astrojs/ts-plugin"

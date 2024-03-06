@@ -12,7 +12,7 @@
                 }">
                 <p class="font-bold text-2xl">{{ player.name }} <span class="font-medium text-2xl">({{ player.proOverall }})</span> 
                 
-                <svg class="w-6 fixed top-2 right-0 animate-bounce" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg v-if="!hovered" class="w-6 fixed top-2 right-0 animate-bounce" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m16 17-4-4-4 4m8-6-4-4-4 4"/>
                 </svg>
                 </p>
@@ -35,7 +35,7 @@
 </template>
 <script setup lang="ts">
     import { computed, ref } from 'vue';
-    import ClubMember from '../../model/ClubMember';
+    import ClubMember from '@models/ClubMember';
     const props = defineProps<{
         player: ClubMember,
         index: number

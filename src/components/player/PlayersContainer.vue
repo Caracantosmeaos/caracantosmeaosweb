@@ -107,9 +107,9 @@
 
 <script lang="ts" setup>
     import { onBeforeMount, type Ref, ref, watch, computed } from 'vue';
-    import ClubMembersService from '../../services/ClubMembersService';
-    import ClubMember from '../../model/ClubMember'
-    import PlayerField from './PlayerField.vue';
+    import ClubMembersService from '@services/ClubMembersService';
+    import ClubMember from '@models/ClubMember'
+    import PlayerField from '@components/player/PlayerField.vue';
 
     const dropdownContent = ref();
 

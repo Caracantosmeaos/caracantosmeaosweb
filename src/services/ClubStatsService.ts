@@ -1,6 +1,6 @@
 import { ref, type Ref } from "vue";
-import ClubStats from "../model/ClubStats";
-import FetchService from "./FetchService";
+import ClubStats from "@models/ClubStats";
+import FetchService from "@services/FetchService";
 export default class ClubStatsService extends FetchService{
 
     constructor(){
