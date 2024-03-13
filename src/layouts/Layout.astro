@@ -2,6 +2,7 @@
 import { isAborted } from 'astro/zod';
 import Mainheader from '../components/Mainheader.astro';
 import Navbar from '../components/Navbar.astro';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
 	title: string;
@@ -25,6 +26,7 @@ const { title, isindex, description, keywords } = Astro.props;
 		{keywords && <meta name="keywords" content={keywords}/>}
 		{!keywords && <meta name="keywords" content={title}/>}
 		<title>{title}</title>
+		<ViewTransitions />
 
 		<meta name="theme-color" content="#fed000" />
 		<meta name="color-scheme" content="dark light" />
