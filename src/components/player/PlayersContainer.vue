@@ -1,14 +1,14 @@
 <template>
     <div role="contentinfo" class="w-full">
         <header class="flex w-full justify-end">
-            <div class="basis-4/4 md:basis-3/4 w-full py-4 px-6 flex flex-wrap justify-around items-center rounded-lg shadow-lg dark:shadow dark:bg-base-100">
-                <div class="basis-2/2 md:basis-1/2 flex flex-row justify-center align-middle items-center gap-2">
+            <div class="basis-4/4 lg:basis-3/4 w-full py-4 px-6 flex flex-wrap justify-around items-center rounded-lg shadow-lg dark:shadow dark:bg-base-100">
+                <div class="basis-2/2 lg:basis-1/2 flex flex-row justify-center align-middle items-center gap-2">
                     <span><strong>Filtrar por nombre</strong></span>
                     <label class="form-control w-full max-w-xs">
                         <input v-model="nameFilter" type="text" placeholder="Nickname o nombre del jugador" class="input input-bordered w-full max-w-xs" />
                     </label>
                 </div>
-                <div class="basis-2/2 md:basis-1/2 flex flex-row justify-center align-middle items-center gap-1">
+                <div class="basis-2/2 lg:basis-1/2 flex flex-row justify-center align-middle items-center gap-1">
                     <div class="dropdown"><span><strong>Ordenar por </strong></span>
                         <div tabindex="0" role="button" class="btn m-1">{{orderTypes[selectedOrder]}}</div>
                         <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52" ref="dropdownContent">
@@ -31,7 +31,7 @@
             </div>
         </header>
         <div class="flex flex-wrap w-full mt-4 ">
-            <aside class=" basis-4/4 md:basis-1/4 w-full md:px-4 min-h-full">
+            <aside class=" basis-4/4 lg:basis-1/4 w-full lg:px-4 min-h-full">
                 <div role="complementary" class="p-4 min-h-full rounded-lg shadow-lg dark:shadow dark:bg-base-200">
                     <span class="px-3 justify-center"><strong>Filtrar por posición</strong></span>
                     <div class="form-control flex flex-wrap flex-row">
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </aside>
-            <div class="basis-4/4 md:basis-3/4 w-full p-4 rounded-lg shadow md:shadow-md dark:shadow dark:bg-base-200">
+            <div class="basis-4/4 lg:basis-3/4 w-full p-4 rounded-lg shadow lg:shadow-md dark:shadow dark:bg-base-200">
                 <!-- Ball loader -->
                 <svg v-if="isloading" class="footballloader" viewBox="0 0 866 866" xmlns="http://www.w3.org/2000/svg">
                     <svg class="footballloader" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.83 151.5">
@@ -96,7 +96,7 @@
                 <div v-else class="w-full">
                     <h3 class="text-center text-lg p-3">No existe ningún resultado con los filtros aplicados</h3>
                     <div class="flex place-content-center p-6">
-                        <img src="/illustrations/noresults.svg" class="md:w-1/4 w-full select-none pointer-events-none" alt="background decoration">
+                        <img src="/illustrations/noresults.svg" class="lg:w-1/4 w-full select-none pointer-events-none" alt="background decoration">
                     </div>
                 </div>
 

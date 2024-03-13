@@ -1,13 +1,13 @@
 <template>
-    <div class="bg-base-100 text-center rounded-lg shadow-md flex flex-col overflow-clip" v-on:click="clickPlayer(index,player)">
+    <div class="bg-base-100 text-center rounded-lg shadow-md flex flex-col overflow-hidden" v-on:click="clickPlayer(index,player)">
         <header class="relative">
             <div class="w-full container relative" v-on:mouseover="hovered=true"  v-on:mouseleave="hovered=false" >
-                <img :src=topImage class="relative plimg select-none pointer-events-none w-4/6 h-full m-auto z-10" alt="Player ingame photo" :class="{
+                <img :src=topImage class="relative plimg select-none pointer-events-none w-4/6 h-full m-auto z-10 drop-shadow-lg" alt="Player ingame photo" :class="{
                     'plimghover': hovered
                 }"/>
                 <div class="top-0 absolute right-0 p-2 font-semibold text-8xl lg:text-9xl z-0 ">{{ player.proOverall }}</div>
             </div>
-            <div class="absolute ploverlay w-full bg-base-100 bg-opacity-70 flex flex-col z-20" v-on:mouseover="hovered=true" v-on:mouseleave="hovered=false"
+            <div class="absolute ploverlay w-full bg-base-100 bg-opacity-70 flex flex-col z-20 " v-on:mouseover="hovered=true" v-on:mouseleave="hovered=false"
             :class="{
                     'plextrainfo-opened': hovered
                 }">
@@ -23,7 +23,7 @@
                 <div role="contentinfo">
                     <p class="text-secondary dark:text-primary font-semibold text-xl">{{ player.favoritePosition }}</p>
                 </div>
-                <div class="plextrainfo-container" >
+                <div class="plextrainfo-container " >
                     <div class="divider px-4 my-1"></div>
                     <div class="plextrainfo p-1">
                         <div class="flex md:text-lg">
