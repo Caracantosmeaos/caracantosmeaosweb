@@ -1,7 +1,18 @@
 ---
-import Layout from '../layouts/Layout.astro';
+export const prerender = false;
+
+import Layout from '@layouts/Layout.astro';
 import PlayersContainer from '@components/player/PlayersContainer.vue'
+
+const {playername} = Astro.params
+let finalplayername:String = "" 
+
+if(playername!=undefined){
+	finalplayername = playername?.toString()
+}
 ---
+
+<!--{finalplayername!="" && <div>{finalplayername}</div>}-->
 
 <Layout title="Caracantosmeaos Club: Plantilla" isindex={false} description='Caracantosmeaos C.F Web oficial: Plantilla' 
 	keywords='fifa, eafc, fifa23, fifa24, eafc24, club, pro, clubespro, proclubs, caracantosmeaos, eltrueno, el_trueno, inicio, plantilla, jugadores'>
