@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-base-100 text-center rounded-lg shadow-md flex flex-col overflow-hidden" v-on:click="clickPlayer(index,player)">
+    <div class="bg-base-100 text-center rounded-lg shadow-md flex flex-col overflow-hidden">
         <header class="relative">
             <div class="w-full container relative" v-on:mouseover="hovered=true"  v-on:mouseleave="hovered=false" >
                 <img :src=topImage class="relative plimg select-none pointer-events-none w-4/6 h-full m-auto z-10 drop-shadow-lg" alt="Player ingame photo" :class="{
@@ -40,7 +40,7 @@
                                 <p><strong>Rojas: </strong>{{ player.redCards }}</p>
                             </div>
                         </div>
-                        <button class="btn btn-sm btn-primary my-1 md:my-2">Ver más</button>
+                        <button class="btn btn-sm btn-primary my-1 md:my-2"  v-on:click="clickPlayer(index,player)">Ver más</button>
                     </div>
                 </div>
             </div>
@@ -58,6 +58,7 @@
 
     const hovered = ref(false)
 
+
     const emit = defineEmits({
         clickedPlayer: ({index, player}) => {return true}
     })
@@ -68,6 +69,10 @@
 
     function trimDecimal(decimal:number, trim:number){
         return decimal.toFixed(trim)
+    }
+
+    function redirectToPlayerDetail(){
+        window.location.href = '/plantilla/'+props.player.name;
     }
 
     const topImage = computed(() => {

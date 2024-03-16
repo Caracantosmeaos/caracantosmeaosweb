@@ -11,7 +11,7 @@
                 <div class="basis-2/2 lg:basis-1/2 flex flex-row justify-center align-middle items-center gap-1">
                     <div class="dropdown"><span><strong>Ordenar por </strong></span>
                         <div tabindex="0" role="button" class="btn m-1">{{orderTypes[selectedOrder]}}</div>
-                        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52" ref="dropdownContent">
+                        <ul tabindex="0" class="dropdown-content z-30 menu p-2 shadow bg-base-200 rounded-box w-52" ref="dropdownContent">
                             <li v-for="(value, index) in orderTypes"><a v-on:click="selectedOrder=index" @click="closeDropdown()">{{ value }}</a></li>
                         </ul>
                     </div>
@@ -85,12 +85,9 @@
 
 
                 <div v-else-if="finalMembers.length>0" class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3  content-center justify-center">
+                    <PlayerDetailModal v-if="modalVisible" :player="detailedPlayer" @detailModalClosed="handleClosedModal" />
                     <TransitionGroup name="playerlist">
-                        <PlayerField v-for="(member, index) in finalMembers" :key="member" :player="member" :index="index" @clickedPlayer="handlePlayerClick(index, member)" 
-                            :class="{ 
-                                'shadow-xl': activePlayer==index 
-                            }"
-                        />
+                        <PlayerField v-for="(member, index) in finalMembers" :key="member" :player="member" :index="index" @clickedPlayer="handlePlayerClick"/>
                     </TransitionGroup>
 			    </div>
                 <div v-else class="w-full">
@@ -106,10 +103,16 @@
 </template>
 
 <script lang="ts" setup>
-    import { onBeforeMount, type Ref, ref, watch, computed } from 'vue';
+    import { onBeforeMount, type Ref, ref, watch, computed, type ComputedRef, onMounted } from 'vue';
     import ClubMembersService from '@services/ClubMembersService';
     import ClubMember from '@models/ClubMember'
     import PlayerField from '@components/player/PlayerField.vue';
+    import PlayerDetailModal from '@components/player/PlayerDetailModal.vue';
+
+    const props = defineProps<{
+        detailPlayerName: string
+    }>()
+    const selectedDetailedPlayer = ref(-1)
 
     const dropdownContent = ref();
 
@@ -157,7 +160,7 @@
                 fmembers.sort((a:ClubMember,b:ClubMember) => (a.gamesPlayed > b.gamesPlayed) ? 1 : ((b.gamesPlayed > a.gamesPlayed) ? -1 : 0))
                 if(!ascOrder) fmembers.reverse()
         }
-    activePlayer.value = -1
+    //activePlayer.value = -1
         return fmembers
     }
 
@@ -189,15 +192,46 @@
 
     const overallFilter = ref(75)
 
-    const activePlayer = ref(-1)
-    function handlePlayerClick(index, player?){
-        if(activePlayer.value!==index) activePlayer.value = index
-        else activePlayer.value = -1
+    const preDetailedPL:ClubMember = ref(null)
+    function handlePlayerClick(edata){
+        preDetailedPL.value = edata.player;
+        modalVisible.value = true
     }
 
+    const modalVisible = ref(false)
+    function handleClosedModal(){
+        modalVisible.value = false
+        if(props.detailPlayerName!=""){
+            window.location.href = '.';
+        }
+        selectedDetailedPlayer.value = -1;
+    }
+
+    //const preDetailedPL = ref(ClubMember)
+    const detailedPlayer:ComputedRef<ClubMember> = computed(() => {
+        let p = null
+        if(preDetailedPL.value!=null) p = preDetailedPL.value
+        else{
+            if(props.detailPlayerName!=""){
+             p = members.value.filter((el) => el.name.toLowerCase() == props.detailPlayerName.toLowerCase() )[0]
+            if(!p){
+                window.location.href = '.';
+            }
+        }else if(selectedDetailedPlayer.value!=-1){
+            p = members.value[selectedDetailedPlayer.value]
+        }
+        }
+        return p;
+    })
 
     onBeforeMount(async ()=>{
         await memberService.fetch()
+    })
+
+    onMounted(async ()=>{
+        if(props.detailPlayerName!="" || selectedDetailedPlayer.value!=-1){
+            modalVisible.value = true
+        }
     })
 </script>
 
