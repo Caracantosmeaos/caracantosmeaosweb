@@ -192,7 +192,7 @@
 
     const overallFilter = ref(75)
 
-    const preDetailedPL:ClubMember = ref(null)
+    const preDetailedPL = ref(null)
     function handlePlayerClick(edata){
         preDetailedPL.value = edata.player;
         modalVisible.value = true

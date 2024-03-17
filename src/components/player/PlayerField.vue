@@ -71,9 +71,6 @@
         return decimal.toFixed(trim)
     }
 
-    function redirectToPlayerDetail(){
-        window.location.href = '/plantilla/'+props.player.name;
-    }
 
     const topImage = computed(() => {
         return `/players/${props.player.name}_top_transp.png`
@@ -81,7 +78,7 @@
 
 
 </script>
-<style>
+<style scoped>
 
     .ploverlay{
         /*background: rgba(255,255,255,0);*/

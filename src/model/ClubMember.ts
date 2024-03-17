@@ -1,5 +1,12 @@
 export default class ClubMember {
     name: string
+    proName: string
+    proPos: number
+    proHeight: number
+    proOverall: number
+    manOfTheMatch: number
+    manOfTheMatchPercent: number
+    favoritePosition: Position
     gamesPlayed: number
     winRate: number
     goals: number
@@ -16,14 +23,7 @@ export default class ClubMember {
     tacklesMade: number
     tackleSuccessRate: number
     tacklesSuccess: number
-    proName: string
-    proPos: number
-    proHeight: number
-    proOverall: number
-    manOfTheMatch: number
-    manOfTheMatchPercent: number
     redCards: number
-    favoritePosition: Position
 
     constructor(json: any){
         this.name = json.name
