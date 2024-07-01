@@ -37,7 +37,7 @@
 </script>
 <template>
     <dialog ref="dialog" id="modal" class="modal modal-middle p-2 lg:p-4" @close="modalClosed()">
-        <div class="modal-box overflow-hidden p-1 w-full">
+        <div class="modal-box overflow-hidden p-1">
             <form method="dialog">
                 <button class="btn btn-sm btn-circle btn-ghost fixed right-1 top-1">✕</button>
             </form>
@@ -46,8 +46,8 @@
                 <h4 class="text-md text-center">{{ player.favoritePosition }} <span class="font-semibold">({{ player.proOverall }})</span></h4>
             </header>
             <section class="hidden lg:flex content-center mt-2 w-full">
-                <div class="w-full">
-                    <img :src=fullImage class="select-none pointer-events-none h-full m-auto  w-full drop-shadow-lg" alt="Player ingame photo" @error="defaultFullImage" />
+                <div class="w-full flex">
+                    <img :src=fullImage class="select-none pointer-events-none  m-auto  w-full drop-shadow-lg" alt="Player ingame photo" @error="defaultFullImage" />
                 </div>
                 <div class="text-center w-full p-2 flex flex-col ">
                     <div class="flex px-2 ">
