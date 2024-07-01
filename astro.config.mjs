@@ -16,6 +16,6 @@ export default defineConfig({
   })],
   output: "hybrid",
   adapter: node({
-    mode: "middleware"
+    mode: "standole"
   })
 });

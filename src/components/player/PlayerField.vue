@@ -5,7 +5,7 @@
                 <img :src=topImage class="relative plimg select-none pointer-events-none w-4/6 h-full m-auto z-10 drop-shadow-lg" alt="Player ingame photo" :class="{
                     'plimghover': hovered
                 }"/>
-                <div class="top-0 absolute right-0 p-2 font-semibold text-8xl lg:text-9xl z-0 ">{{ player.proOverall }}</div>
+                <div class="top-0 absolute right-0 p-2 font-semibold text-8xl lg:text-9xl z-0 drop-shadow-lg">{{ player.proOverall }}</div>
             </div>
             <div class="absolute ploverlay w-full bg-base-100 bg-opacity-70 flex flex-col z-20 " v-on:mouseover="hovered=true" v-on:mouseleave="hovered=false"
             :class="{
