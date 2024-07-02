@@ -13,10 +13,13 @@ export default class ClubMember {
     goalsPerMatch: number
     assists: number
     assistsPerMatch: number
+    goalsPlusAssists: number
+    goalsPlusAssistsPerMatch: number
     cleanSheetsDef: number
     cleanSheetsGK: number
     shotSuccessRate: number
     passesMade: number
+    passesMadePerMatch: number
     passSuccessRate: number
     passesSuccess: number
     ratingAve: number
@@ -33,10 +36,13 @@ export default class ClubMember {
         this.goalsPerMatch = this.goals/this.gamesPlayed
         this.assists = Number(json.assists)
         this.assistsPerMatch = this.assists/this.gamesPlayed
+        this.goalsPlusAssists = this.goals + this.assists
+        this.goalsPlusAssistsPerMatch = this.goalsPlusAssists/this.gamesPlayed
         this.cleanSheetsDef = Number(json.cleanSheetsDef)
         this.cleanSheetsGK = Number(json.cleanSheetsGK)
         this.shotSuccessRate = Number(json.shotSuccessRate)
         this.passesMade = Number(json.passesMade)
+        this.passesMadePerMatch = this.passesMade/this.gamesPlayed
         this.passSuccessRate = Number(json.passSuccessRate)
         this.passesSuccess = (this.passSuccessRate*this.passesMade)/100
         this.ratingAve = Number(json.ratingAve)

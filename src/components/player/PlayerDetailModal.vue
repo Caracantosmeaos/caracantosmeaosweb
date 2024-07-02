@@ -133,7 +133,7 @@
             <section class="lg:hidden ">
                 <div class="relative flex container w-full h-96  p-2 overflow-visible">
                     <img :src=fullImage class="absolute plimg select-none pointer-events-none w-3/6 object-scale-down object-left-top h-fit" alt="Player ingame photo" @error="defaultFullImage">
-                    <div class="absolute z-20 right-0 top-0 w-8/12  ploverlay  rounded-lg overflow-scroll h-full">
+                    <div class="absolute z-20 right-0 top-0 w-8/12  ploverlay  rounded-lg  h-full">
                         <div class="relative h-full overflow-scroll pt-2">
                             <div class="absolute h-full space-y-2">
                             <div class="font-semibold w-full flex content-center align-middle  space-x-1">
@@ -181,6 +181,14 @@
                                 <p class="self-center w-full text-clip text-pretty">Asistencias por partido</p>
                                 <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.assistsPerMatch" :decimal-places="2" class="inline"></count-up></p>
                             </div>
+                            <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
+                                <p class="self-center w-full text-clip text-pretty">Goles+Asistencias </p>
+                                <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.goalsPlusAssists" class="inline"></count-up></p>
+                            </div>
+                            <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
+                                <p class="self-center w-full text-clip text-pretty">G+A Por partido </p>
+                                <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.goalsPlusAssistsPerMatch" class="inline"></count-up></p>
+                            </div>
                             <div class="divider p-0 m-0"></div>
                             <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
                                 <p class="self-center w-full text-clip text-pretty">Pases totales</p>
@@ -193,6 +201,10 @@
                             <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
                                 <p class="self-center w-full text-clip text-pretty">Pases exitosos (%)</p>
                                 <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.passSuccessRate" :decimal-places="1" class="inline"></count-up>%</p>
+                            </div>
+                            <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
+                                <p class="self-center w-full text-clip text-pretty">Pases por partido</p>
+                                <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.passesMadePerMatch" :decimal-places="0" class="inline"></count-up></p>
                             </div>
                             <div class="divider p-0 m-0"></div>
                             <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
