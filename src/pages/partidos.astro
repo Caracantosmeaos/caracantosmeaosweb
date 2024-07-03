@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 
+import MatchesContainer from '@/components/match/MatchesContainer.vue';
 import Layout from '@layouts/Layout.astro';
 ---
 
@@ -18,7 +19,7 @@ import Layout from '@layouts/Layout.astro';
 	</header>
 	<section >
 		<container class="flex p-8 lg:p-16 justify-center items-center">
-
+            <MatchesContainer client:visible/>
 		</container>
 	</section>
 
