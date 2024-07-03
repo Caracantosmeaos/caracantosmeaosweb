@@ -42,7 +42,6 @@ export default class ClubMatch {
     }
 
     constructor(json: any){
-        //console.log(json.timeAgo.number)
         this.matchId = Number(json.matchId)
         this.timestamp = json.timestamp
         this.timeAgo =  {
