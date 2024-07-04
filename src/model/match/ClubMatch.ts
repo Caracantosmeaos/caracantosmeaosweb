@@ -53,10 +53,10 @@ export default class ClubMatch {
         const jsonRivalClub = json.clubs[Object.keys(json.clubs)[1]]
         const jsonAggregateRival = json.aggregate[Object.keys(json.clubs)[1]]
         if(Number(jsonOwnClub.losses)==1){
-            this.result = Result.Perdido
+            this.result = Result.Derrota
         }else if(Number(jsonOwnClub.ties)==1){
             this.result = Result.Empate
-        }else this.result = Result.Ganado
+        }else this.result = Result.Victoria
         
         const jsonOwnPlayers =  json.players[Object.keys(json.players)[0]]
         let ownClubPlayers:Array<PlayerMatchStats> = []
@@ -106,8 +106,8 @@ export default class ClubMatch {
     }
 }
 
-enum Result{
+export enum Result{
     Empate,
-    Ganado,
-    Perdido
+    Victoria,
+    Derrota
 }

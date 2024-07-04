@@ -17,23 +17,19 @@ export default class ClubMatchService extends FetchService{
 
 
     async fetch(): Promise<void>{
-        console.log("fueratry")
         try{
             const url = "https://api.caracantosmeaos.club/club/matchHistory/"+this.matchType
             const response = await fetch(url)
             const json = await response.json()
             this.status.value = response.status           
             
-            console.log("if start")
             if(this.status.value==200 && json.status==200){
-                console.log("inside if")
                 let parsed:Array<ClubMatch> = []
                 for (var match in json.response){
                     var parsedMatch = new ClubMatch(json.response[match])
                     parsed.push(parsedMatch)
                 }
                 this.data.value = parsed;
-                console.log("ok")
             }else this.error.value = response.statusText
         }catch(error){
             console.log(error)
