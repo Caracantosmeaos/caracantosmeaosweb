@@ -35,6 +35,7 @@ export default class ClubMatchService extends FetchService{
             console.log(error)
             this.error.value = error
         }finally{
+            console.log("Finished "+this.matchType)
             this.isloading.value = false;
         }
     }
