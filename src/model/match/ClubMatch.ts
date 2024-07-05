@@ -8,6 +8,8 @@ export default class ClubMatch {
         unit: string
     }
     result: Result
+    winnerByDnf: Boolean
+    winnerByPen: Boolean
     ownClub:{
         id: number
         name: string
@@ -52,6 +54,7 @@ export default class ClubMatch {
         const jsonAggregateOwn = json.aggregate[Object.keys(json.clubs)[0]]
         const jsonRivalClub = json.clubs[Object.keys(json.clubs)[1]]
         const jsonAggregateRival = json.aggregate[Object.keys(json.clubs)[1]]
+        this.winnerByDnf = jsonOwnClub.winnerByDnf || jsonRivalClub.winnerByDnf
         if(Number(jsonOwnClub.losses)==1){
             this.result = Result.Derrota
         }else if(Number(jsonOwnClub.ties)==1){
@@ -68,7 +71,7 @@ export default class ClubMatch {
             id: jsonOwnClub.details.clubId,
             name: jsonOwnClub.details.name,
             matchStats: {
-                goals: jsonAggregateOwn.goals,
+                goals: jsonOwnClub.goals,
                 shots: jsonAggregateOwn.shots,
                 passesMade: jsonAggregateOwn.passattempts,
                 passesSuccess: jsonAggregateOwn.passesmade,
@@ -91,7 +94,7 @@ export default class ClubMatch {
             id: jsonRivalClub.details.clubId,
             name: jsonRivalClub.details.name,
             matchStats: {
-                goals: jsonAggregateRival.goals,
+                goals: jsonRivalClub.goals,
                 shots: jsonAggregateRival.shots,
                 passesMade: jsonAggregateRival.passattempts,
                 passesSuccess: jsonAggregateRival.passesmade,
