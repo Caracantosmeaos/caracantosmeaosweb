@@ -30,7 +30,23 @@
                 </div>
             </div>
         </header>
-        <div v-if="!hasError" role="contentinfo" class="mt-6 w-full p-3 lg:p-4 flex rounded-lg shadow-lg dark:shadow dark:bg-base-200">
+        <div v-if="!hasError && (!isPlayoffLoading && !isLeagueLoading) && finalMatchList.length>0" class="mt-3 flex flex-row-reverse justify-end flex-wrap">
+            <div v-for="(match, index) in finalMatchList" :key="match.matchId" :match="match" :index="index" >
+                <div class="font-extrabold text-sm p-1 px-2 mx-1 rounded-lg"
+                :class="{
+                    'bg-error': match.result==2,
+                    'text-error-content': match.result==2,
+                    'bg-success': match.result==1,
+                    'text-success-content': match.result==1,
+                    'bg-neutral': match.result==0,
+                    'text-neutral-content': match.result==0
+                }"
+                >
+                 {{ firstChar(Result[match.result]) }}
+                </div>
+            </div>
+        </div>
+        <div v-if="!hasError" role="contentinfo" class="mt-3 w-full p-3 lg:p-4 flex rounded-lg shadow-lg dark:shadow dark:bg-base-200">
             <svg v-if="isPlayoffLoading || isLeagueLoading" class="footballloader" viewBox="0 0 866 866" xmlns="http://www.w3.org/2000/svg">
                     <svg class="footballloader" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.83 151.5">
                         <path class="path-0 footballloader" d="M117.24,69.24A8,8,0,0,0,115.67,67c-4.88-4-9.8-7.89-14.86-11.62A4.93,4.93,0,0,0,96.93,55c-5.76,1.89-11.4,4.17-17.18,6a4.36,4.36,0,0,0-3.42,4.12c-1,6.89-2.1,13.76-3,20.66a4,4,0,0,0,1,3.07c5.12,4.36,10.39,8.61,15.68,12.76a3.62,3.62,0,0,0,2.92.75c6.29-2.66,12.52-5.47,18.71-8.36a3.49,3.49,0,0,0,1.68-2.19c1.34-7.25,2.54-14.55,3.9-22.58Z"
@@ -105,6 +121,20 @@
         return filteredList
     }
 
+    function firstChar(str: string){
+        return str.charAt(0)
+    }
+
+
+    const resultColor = computed((res) => {
+        return {
+            'bg-error': res==2,
+            'bg-success': res==1,
+            'bg-neutral': res==0
+        }
+    })
+
+
     function handleOrder(list: ClubMatch[]){
         return list.sort((a:ClubMatch,b:ClubMatch) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0))
     }
@@ -115,8 +145,6 @@
         }else if(radioMatchType.value==="playoff"){
             return handleOrder(handleFilters(playoffMatches.value))
         }else{
-            console.log("league: "+leagueMatchService.isloading.value)
-            console.log("playoff: "+playoffMatchService.isloading.value)
             return handleOrder(handleFilters(playoffMatches.value.concat(leagueMatches.value)))
         }
     })

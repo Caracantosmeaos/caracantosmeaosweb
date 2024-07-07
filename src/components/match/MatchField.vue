@@ -28,6 +28,20 @@
                     </div>
                 </div>
             </div>
+            <div class="flex items-center justify-center align-middle  w-full md:hidden">
+                <div class="justify-self-start w-full flex justify-end text-sm">
+                    {{ match.ownClub.name }}
+                </div>
+                <div class="self-center justify-self-center text-md font-extrabold mx-2 relative text-center">
+                    VS
+                </div>
+                <div class="justify-self-end w-full flex justify-start text-sm">
+                    {{ match.opponentClub.name }}
+                </div>
+            </div>
+            <div class="flex items-center justify-center mt-2 md:mt-0" v-if="match.winnerByDnf">
+                <div class="badge badge-error badge-sm badge-outline">Desconexión</div>
+            </div>
         </div>
         <div class="collapse-content">
             TODO
@@ -37,7 +51,6 @@
 <script setup lang="ts">
     import { computed, ref } from 'vue';
     import ClubMatch from '@models/match/ClubMatch'
-    import {Result} from '@models/match/ClubMatch'
     const props = defineProps<{
         match: ClubMatch,
         index: number

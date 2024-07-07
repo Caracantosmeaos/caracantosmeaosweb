@@ -54,7 +54,7 @@ export default class ClubMatch {
         const jsonAggregateOwn = json.aggregate[Object.keys(json.clubs)[0]]
         const jsonRivalClub = json.clubs[Object.keys(json.clubs)[1]]
         const jsonAggregateRival = json.aggregate[Object.keys(json.clubs)[1]]
-        this.winnerByDnf = jsonOwnClub.winnerByDnf || jsonRivalClub.winnerByDnf
+        this.winnerByDnf = Boolean(Number(jsonOwnClub.winnerByDnf) || Number(jsonRivalClub.winnerByDnf))
         if(Number(jsonOwnClub.losses)==1){
             this.result = Result.Derrota
         }else if(Number(jsonOwnClub.ties)==1){
@@ -90,21 +90,45 @@ export default class ClubMatch {
             var parsedPl = new PlayerMatchStats(jsonRivalPlayers[jsonPl])
             rivalClubPlayers.push(parsedPl)
         }
-        this.opponentClub = {
-            id: jsonRivalClub.details.clubId,
-            name: jsonRivalClub.details.name,
-            matchStats: {
-                goals: jsonRivalClub.goals,
-                shots: jsonAggregateRival.shots,
-                passesMade: jsonAggregateRival.passattempts,
-                passesSuccess: jsonAggregateRival.passesmade,
-                passSuccessRate: (jsonAggregateRival.passesmade/jsonAggregateRival.passattempts) * 100,
-                redCards: jsonAggregateRival.redcards,
-                tacklesMade: jsonAggregateRival.tackleattempts,
-                tackleSuccess: jsonAggregateRival.tacklesmade,
-                tackleSuccessRate: (jsonAggregateRival.tacklesmade/jsonAggregateRival.tackleattempts) * 100
-            },
-            players: ownClubPlayers
+        if(jsonRivalClub.details){
+            this.opponentClub = {
+                id: jsonRivalClub.details.clubId,
+                name: jsonRivalClub.details.name,
+                matchStats: {
+                    goals: jsonRivalClub.goals,
+                    shots: jsonAggregateRival.shots,
+                    passesMade: jsonAggregateRival.passattempts,
+                    passesSuccess: jsonAggregateRival.passesmade,
+                    passSuccessRate: (jsonAggregateRival.passesmade/jsonAggregateRival.passattempts) * 100,
+                    redCards: jsonAggregateRival.redcards,
+                    tacklesMade: jsonAggregateRival.tackleattempts,
+                    tackleSuccess: jsonAggregateRival.tacklesmade,
+                    tackleSuccessRate: (jsonAggregateRival.tacklesmade/jsonAggregateRival.tackleattempts) * 100
+                },
+                players: ownClubPlayers
+            }
+        }else{
+            try{
+                this.opponentClub = {
+                    id: null,
+                    name: "Desconocido",
+                    matchStats: {
+                        goals: jsonRivalClub.goals,
+                        shots: jsonAggregateRival.shots,
+                        passesMade: jsonAggregateRival.passattempts,
+                        passesSuccess: jsonAggregateRival.passesmade,
+                        passSuccessRate: (jsonAggregateRival.passesmade/jsonAggregateRival.passattempts) * 100,
+                        redCards: jsonAggregateRival.redcards,
+                        tacklesMade: jsonAggregateRival.tackleattempts,
+                        tackleSuccess: jsonAggregateRival.tacklesmade,
+                        tackleSuccessRate: (jsonAggregateRival.tacklesmade/jsonAggregateRival.tackleattempts) * 100
+                    },
+                    players: ownClubPlayers
+                }
+            }catch(error){
+                this.opponentClub = null
+                console.log(error)
+            }
         }
     }
 }
