@@ -1,5 +1,5 @@
 <template>
-    <div tabindex="0" class="collapse collapse-arrow border-base-200 bg-base-100 border my-3 w-full min-w-full shadow-lg dark:shadow">
+    <div tabindex="0" class="collapse collapse-arrow border-base-200 bg-base-100 border my-3 w-full min-w-full shadow-lg dark:shadow overflow-x-visible">
         <div class="collapse-title flex flex-col w-full min-w-full px-2 py-0">
             <div class="flex items-center justify-center">
                 <div class="badge badge-ghost badge-sm">{{ timestampToStr(match.timestamp) }}</div>
@@ -9,7 +9,7 @@
                     <!-- Own Team -->
                     <div class="indicator self-center p-2 m-2" v-if="match.ownClub.matchStats.redCards>0">
                         <span class="indicator-item badge badge-neutral badge-xs">{{ match.ownClub.matchStats.redCards }}</span>
-                        <div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div>
+                        <div class="tooltip" :data-tip="getRedCardPlayers(true)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
                     </div>
                     <p class="text-end self-center font-medium text-2xl hidden md:flex">{{match.ownClub.name}}</p>
                     <p class="text-end font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 mr-1 rounded-2xl"
@@ -64,39 +64,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!--
-                    <div class="flex items-center justify-center align-middle w-full" v-for="(stat, index) in match.ownClub.matchStats">
-                        <div class="w-full justify-end justify-self-center text-end text-lg font-semibold flex content-end">
-                            <p class="w-fit p-2 rounded-md" 
-                            :class="{'bg-base-300': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index],
-                                'font-bold': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index]
-                            }">1</p>
-                        </div>
-                        <div class="self-center justify-self-center  font-bold mx-8 md:mx-14 text-center align-middle"><p>{{ reverseStatString(stat) }}</p></div>
-                        <div class="w-full justify-start align-middle text-start text-lg font-semibold flex content-start">
-                            <p class="w-fit p-2 rounded-md" 
-                            :class="{'bg-base-300': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index],
-                                'font-bold': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index]
-                            }">{{ match.opponentClub.matchStats[index] }}</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-col" v-for="(stat, index) in match.ownClub.matchStats" :key="stat" :index="index">
-                        <div class="w-full justify-end justify-self-center text-end text-lg font-semibold flex content-end">
-                            <p class="w-fit p-2 rounded-md" 
-                            :class="{'bg-base-300': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index],
-                                'font-bold': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index]
-                            }">{{ match.ownClub.matchStats[index] }}</p>
-                        </div>
-                        <div class="self-center justify-self-center text-lg md:text-xl  font-bold mx-8 md:mx-14 text-center align-middle"><p>{{ reverseStatString(index) }}</p></div>
-                        <div class="w-full justify-start align-middle text-start text-lg font-semibold flex content-start">
-                            <p class="w-fit p-2 rounded-md" 
-                            :class="{'bg-base-300': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index],
-                                'font-bold': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index]
-                            }">{{ match.opponentClub.matchStats[index] }}</p>
-                        </div>
-                    </div>
-                    -->
                 </div>
             </div>
         </div>
@@ -105,6 +72,7 @@
 <script setup lang="ts">
     import { computed, ref } from 'vue';
     import ClubMatch from '@models/match/ClubMatch'
+    import PlayerMatchStats from '@models/match/PlayerMatchStats'
     const props = defineProps<{
         match: ClubMatch,
         index: number
@@ -130,9 +98,26 @@
     }
 
     function trimDecimal(decimal:number, trim:number){
+        if(decimal.toString()==="NaN") return 0
         if(decimal.toString().split(".").length>1 && decimal.toString().split(".")[1].length>trim){
             return decimal.toFixed(trim)
         }else return decimal
+    }
+
+    function getRedCardPlayers(ownclub:boolean){
+        var plist = []
+        if(ownclub){
+            for(var p in props.match.ownClub.players){
+                var parsedp:PlayerMatchStats = props.match.ownClub.players[p]
+                if(parsedp.redCards!=0) plist.push(parsedp.playername);
+            }
+        }else{
+            for(var p in props.match.opponentClub.players){
+                var parsedp:PlayerMatchStats = props.match.opponentClub.players[p]
+                if(parsedp.redCards!=0) plist.push(parsedp.playername)
+            }
+        }
+        return plist
     }
 
 
