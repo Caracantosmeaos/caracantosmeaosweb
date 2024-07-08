@@ -43,8 +43,62 @@
                 <div class="badge badge-error badge-sm badge-outline">Desconexión</div>
             </div>
         </div>
-        <div class="collapse-content">
-            TODO
+        <div class="collapse-content flex flex-col w-full h-full px-2 justify-center align-middle items-center">
+            <div class="mt-4 w-full">
+                <header class="font-semibold text-lg md:text-xl text-primary text-center">RESUMEN DEL PARTIDO</header>
+                <div class="flex w-full mt-2 items-center flex-col mx-auto lg:px-48">
+                    <table class="w-full min-w-full text-center">
+                        <tbody>
+                            <tr class="" v-for="(stat, index) in match.ownClub.matchStats">
+                                <td class="py-2 flex text-end self-end justify-end font-semibold">
+                                    <p class="w-fit px-2 rounded-md text-end" :class="{'bg-base-300': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index],
+                                'font-bold': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index]
+                            }">{{ trimDecimal(match.ownClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
+                                </td>
+                                <td class="py-2 text-sm md:text-md lg:text-lg font-bold">{{ reverseStatStr2[index] }}</td>
+                                <td class="py-2 flex text-start self-start justify-start font-semibold">
+                                    <p class="w-fit px-2 rounded-md" :class="{'bg-base-300': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index],
+                                        'font-bold': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index]
+                                    }">{{ trimDecimal(match.opponentClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--
+                    <div class="flex items-center justify-center align-middle w-full" v-for="(stat, index) in match.ownClub.matchStats">
+                        <div class="w-full justify-end justify-self-center text-end text-lg font-semibold flex content-end">
+                            <p class="w-fit p-2 rounded-md" 
+                            :class="{'bg-base-300': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index],
+                                'font-bold': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index]
+                            }">1</p>
+                        </div>
+                        <div class="self-center justify-self-center  font-bold mx-8 md:mx-14 text-center align-middle"><p>{{ reverseStatString(stat) }}</p></div>
+                        <div class="w-full justify-start align-middle text-start text-lg font-semibold flex content-start">
+                            <p class="w-fit p-2 rounded-md" 
+                            :class="{'bg-base-300': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index],
+                                'font-bold': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index]
+                            }">{{ match.opponentClub.matchStats[index] }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col" v-for="(stat, index) in match.ownClub.matchStats" :key="stat" :index="index">
+                        <div class="w-full justify-end justify-self-center text-end text-lg font-semibold flex content-end">
+                            <p class="w-fit p-2 rounded-md" 
+                            :class="{'bg-base-300': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index],
+                                'font-bold': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index]
+                            }">{{ match.ownClub.matchStats[index] }}</p>
+                        </div>
+                        <div class="self-center justify-self-center text-lg md:text-xl  font-bold mx-8 md:mx-14 text-center align-middle"><p>{{ reverseStatString(index) }}</p></div>
+                        <div class="w-full justify-start align-middle text-start text-lg font-semibold flex content-start">
+                            <p class="w-fit p-2 rounded-md" 
+                            :class="{'bg-base-300': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index],
+                                'font-bold': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index]
+                            }">{{ match.opponentClub.matchStats[index] }}</p>
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -61,6 +115,26 @@
         'text-error': props.match.result==2,
         'text-success': props.match.result==1
     }
+
+    const reverseStatStr2 = {
+        goals: "Goles",
+        shots: "Disparos",
+        shotSuccessRate: "Acierto disparos (%)",
+        passesMade: "Pases intentados",
+        passesSuccess: "Pases acertados",
+        passSuccessRate: "Acierto pases (%)",
+        redCards: "Tarjetas rojas",
+        tacklesMade: "Tacklees intentados",
+        tackleSuccess: "Tacklees acertados",
+        tackleSuccessRate: "Acierto tacklees (%)"
+    }
+
+    function trimDecimal(decimal:number, trim:number){
+        if(decimal.toString().split(".").length>1 && decimal.toString().split(".")[1].length>trim){
+            return decimal.toFixed(trim)
+        }else return decimal
+    }
+
 
     function timestampToStr(timestamp:number){
         const dt = new Date(timestamp*1000)

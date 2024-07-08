@@ -16,6 +16,7 @@ export default class ClubMatch {
         matchStats: {
             goals: number,
             shots: number,
+            shotSuccessRate: number,
             passesMade: number,
             passesSuccess: number,
             passSuccessRate: number
@@ -32,6 +33,7 @@ export default class ClubMatch {
         matchStats: {
             goals: number,
             shots: number,
+            shotSuccessRate: number,
             passesMade: number,
             passesSuccess: number,
             passSuccessRate: number
@@ -73,6 +75,7 @@ export default class ClubMatch {
             matchStats: {
                 goals: jsonOwnClub.goals,
                 shots: jsonAggregateOwn.shots,
+                shotSuccessRate: (jsonAggregateOwn.goals/jsonAggregateOwn.shots) * 100,
                 passesMade: jsonAggregateOwn.passattempts,
                 passesSuccess: jsonAggregateOwn.passesmade,
                 passSuccessRate: (jsonAggregateOwn.passesmade/jsonAggregateOwn.passattempts) * 100,
@@ -97,6 +100,7 @@ export default class ClubMatch {
                 matchStats: {
                     goals: jsonRivalClub.goals,
                     shots: jsonAggregateRival.shots,
+                    shotSuccessRate: (jsonAggregateRival.goals/jsonAggregateRival.shots) * 100,
                     passesMade: jsonAggregateRival.passattempts,
                     passesSuccess: jsonAggregateRival.passesmade,
                     passSuccessRate: (jsonAggregateRival.passesmade/jsonAggregateRival.passattempts) * 100,
@@ -115,6 +119,7 @@ export default class ClubMatch {
                     matchStats: {
                         goals: jsonRivalClub.goals,
                         shots: jsonAggregateRival.shots,
+                        shotSuccessRate: (jsonAggregateRival.goals/jsonAggregateRival.shots) * 100,
                         passesMade: jsonAggregateRival.passattempts,
                         passesSuccess: jsonAggregateRival.passesmade,
                         passSuccessRate: (jsonAggregateRival.passesmade/jsonAggregateRival.passattempts) * 100,
