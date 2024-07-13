@@ -109,7 +109,7 @@ export default class ClubMatch {
                     tackleSuccess: jsonAggregateRival.tacklesmade,
                     tackleSuccessRate: (jsonAggregateRival.tacklesmade/jsonAggregateRival.tackleattempts) * 100
                 },
-                players: ownClubPlayers
+                players: rivalClubPlayers
             }
         }else{
             try{
@@ -128,7 +128,7 @@ export default class ClubMatch {
                         tackleSuccess: jsonAggregateRival.tacklesmade,
                         tackleSuccessRate: (jsonAggregateRival.tacklesmade/jsonAggregateRival.tackleattempts) * 100
                     },
-                    players: ownClubPlayers
+                    players: rivalClubPlayers
                 }
             }catch(error){
                 this.opponentClub = null

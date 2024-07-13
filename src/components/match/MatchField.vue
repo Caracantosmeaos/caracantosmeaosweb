@@ -24,7 +24,7 @@
                     <p class="text-start self-center font-medium text-2xl hidden md:flex">{{match.opponentClub.name}}</p>
                     <div class="indicator self-center p-2 m-2" v-if="match.opponentClub.matchStats.redCards>0">
                         <span class="indicator-item badge badge-neutral badge-xs">{{ match.opponentClub.matchStats.redCards }}</span>
-                        <div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div>
+                        <div class="tooltip" :data-tip="getRedCardPlayers(false)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
                     </div>
                 </div>
             </div>
@@ -43,8 +43,8 @@
                 <div class="badge badge-error badge-sm badge-outline">Desconexión</div>
             </div>
         </div>
-        <div class="collapse-content flex flex-col w-full h-full px-2 justify-center align-middle items-center">
-            <div class="mt-4 w-full">
+        <div class="collapse-content flex flex-col w-full h-full min-h-full px-2 justify-center align-middle items-center overflow-x-hidden">
+            <article class="mt-4 w-full">
                 <header class="font-semibold text-lg md:text-xl text-primary text-center">RESUMEN DEL PARTIDO</header>
                 <div class="flex w-full mt-2 items-center flex-col mx-auto lg:px-48">
                     <table class="w-full min-w-full text-center">
@@ -65,7 +65,115 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </article>
+            <article class="mt-4 w-full py-1 overflow-hidden">
+                <header class="font-semibold text-lg md:text-xl text-primary text-center">JUGADORES</header>
+                <div class="hidden lg:flex items-center justify-center align-middle w-full h-full p-2  lg:py-4 mt-2">
+                    <div class="w-full flex flex-col h-full justify-start align-top items-start">
+                        <table class="w-full lg:w-8/12 text-center self-end justify-end">
+                            <thead class="bg-base-300 rounded-xl">
+                                <tr class="bg-base-300 rounded-xl">
+                                    <th class="bg-base-100 invisible"></th>
+                                    <th class="p-2 text-lg rounded-s-xl hidden lg:table-cell">Goles</th>
+                                    <th class="p-2 text-lg rounded-s-xl lg:hidden">Gol</th>
+                                    <th class="p-2 text-lg hidden lg:table-cell">Asistencias</th>
+                                    <th class="p-2 text-lg lg:hidden">Asis</th>
+                                    <th class="p-2 text-lg rounded-e-xl hidden lg:table-cell">Valoración</th>
+                                    <th class="p-2 text-lg rounded-e-xl lg:hidden">Val</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(p,index) in match.ownClub.players">
+                                    <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
+                                        'rounded-t-xl': index==0,
+                                        'rounded-b-xl': index+1==match.ownClub.players.length
+                                    }">{{ p.playername }}</td>
+                                    <td>{{ p.goals }}</td>
+                                    <td>{{ p.assists }}</td>
+                                    <td>{{ p.rating }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="self-center justify-self-center text-md font-extrabold mx-2 relative text-center h-full py-1 hidden lg:block">
+                        <div class="divider divider-horizontal h-full">VS</div>
+                    </div>
+                    <div class="w-full flex flex-col h-full justify-start align-top items-start">
+                        <table class="w-full lg:w-8/12 text-center self-start justify-start">
+                            <thead class="bg-base-300 rounded-xl">
+                                <tr class="bg-base-300 rounded-xl ">
+                                    <th class="p-2 text-lg rounded-s-xl hidden lg:table-cell">Goles</th>
+                                    <th class="p-2 text-lg rounded-s-xl lg:hidden">Gol</th>
+                                    <th class="p-2 text-lg hidden lg:table-cell">Asistencias</th>
+                                    <th class="p-2 text-lg lg:hidden">Asis</th>
+                                    <th class="p-2 text-lg rounded-e-xl hidden lg:table-cell">Valoración</th>
+                                    <th class="p-2 text-lg rounded-e-xl lg:hidden">Val</th>
+                                    <th class="bg-base-100 invisible"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(p,index) in match.opponentClub.players">
+                                    <td>{{ p.goals }}</td>
+                                    <td>{{ p.assists }}</td>
+                                    <td>{{ p.rating }}</td>
+                                    <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
+                                        'rounded-t-xl': index==0,
+                                        'rounded-b-xl': index+1==match.opponentClub.players.length
+                                    }">{{ p.playername }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="lg:hidden flex flex-col w-full justify-center align-middle items-center mt-2">
+                    <table class="w-full md:w-10/12 text-center self-center justify-center">
+                            <thead class="bg-base-300 rounded-xl">
+                                <tr class="bg-base-300 rounded-xl">
+                                    <th class="bg-base-100 invisible"></th>
+                                    <th class="p-2  rounded-s-xl ">Gol</th>
+                                    <th class="p-2  ">Asis</th>
+                                    <th class="p-2  rounded-e-xl ">Val</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(p,index) in match.ownClub.players">
+                                    <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
+                                        'rounded-t-xl': index==0,
+                                        'rounded-b-xl': index+1==match.ownClub.players.length
+                                    }">{{ p.playername }}</td>
+                                    <td>{{ p.goals }}</td>
+                                    <td>{{ p.assists }}</td>
+                                    <td>{{ p.rating }}</td>
+                                </tr>
+                            </tbody>
+                    </table>
+                    <div class="divider w-full px-2">VS</div>
+                    <table class="w-full md:w-10/12 text-center self-center justify-center">
+                            <thead class="bg-base-300 rounded-xl">
+                                <tr class="bg-base-300 rounded-xl">
+                                    <th class="bg-base-100 invisible"></th>
+                                    <th class="p-2 rounded-s-xl">Gol</th>
+                                    <th class="p-2">Asis</th>
+                                    <th class="p-2 rounded-e-xl">Val</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(p,index) in match.opponentClub.players">
+                                    <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
+                                        'rounded-t-xl': index==0,
+                                        'rounded-b-xl': index+1==match.opponentClub.players.length
+                                    }">{{ p.playername }}</td>
+                                    <td>{{ p.goals }}</td>
+                                    <td>{{ p.assists }}</td>
+                                    <td>{{ p.rating }}</td>
+                                </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </article>
+            <article>
+                <button class="btn btn-sm btn-primary mt-4">Ver más</button>
+            </article>
         </div>
     </div>
 </template>
@@ -120,6 +228,15 @@
         return plist
     }
 
+    function getPlayerNames(ownclub:boolean){
+        var plist = []
+        if(ownclub){
+            props.match.ownClub.players.forEach((p) => plist.push(p.playername));
+        }else{
+            props.match.opponentClub.players.forEach((p) => plist.push(p.playername));
+        }
+        return plist
+    }
 
     function timestampToStr(timestamp:number){
         const dt = new Date(timestamp*1000)
