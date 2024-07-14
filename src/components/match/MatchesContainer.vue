@@ -112,9 +112,12 @@
         //await leagueMatchService.fetch()
         await Promise.all([playoffMatchService.fetch(), leagueMatchService.fetch()])
     })
+    const props = defineProps<{
+        matchId: String
+    }>()
 
     const radioMatchType = ref("all");
-    const IDFilter = ref("")
+    const IDFilter = ref(props.matchId.toString())
 
     function handleFilters(list: ClubMatch[]){
         var filteredList = list.filter((el) => IDFilter.value.includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
@@ -124,16 +127,6 @@
     function firstChar(str: string){
         return str.charAt(0)
     }
-
-
-    const resultColor = computed((res) => {
-        return {
-            'bg-error': res==2,
-            'bg-success': res==1,
-            'bg-neutral': res==0
-        }
-    })
-
 
     function handleOrder(list: ClubMatch[]){
         return list.sort((a:ClubMatch,b:ClubMatch) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0))

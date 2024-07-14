@@ -1,5 +1,5 @@
 <template>
-    <div tabindex="0" class="collapse collapse-arrow border-base-200 bg-base-100 border my-3 w-full min-w-full shadow-lg dark:shadow overflow-x-visible">
+    <div :id="match.matchId.toString()" tabindex="0" class="collapse collapse-arrow border-base-200 bg-base-100 border my-3 w-full min-w-full shadow-lg dark:shadow overflow-x-visible">
         <div class="collapse-title flex flex-col w-full min-w-full px-2 py-0">
             <div class="flex items-center justify-center">
                 <div class="badge badge-ghost badge-sm">{{ timestampToStr(match.timestamp) }}</div>
@@ -173,6 +173,9 @@
             </article>
             <article>
                 <button class="btn btn-sm btn-primary mt-4">Ver más</button>
+            </article>
+            <article>
+                <span class="font-thin text-xs text-neutral">ID: #{{ match.matchId }}</span>
             </article>
         </div>
     </div>
