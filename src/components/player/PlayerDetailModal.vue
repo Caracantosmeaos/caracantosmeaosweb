@@ -31,6 +31,7 @@
 
 
     onMounted(async ()=>{
+        console.log(props.player)
         showModal()
     })
 
@@ -102,7 +103,7 @@
                             </div>
                             <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
                                 <p class="self-center w-full text-clip text-pretty">G+A Por partido </p>
-                                <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.goalsPlusAssistsPerMatch" class="inline"></count-up></p>
+                                <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.goalsPlusAssistsPerMatch" :decimal-places="2" class="inline"></count-up></p>
                             </div>
                             <div class="divider p-0 m-0"></div>
                             <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
@@ -119,7 +120,7 @@
                             </div>
                             <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
                                 <p class="self-center w-full text-clip text-pretty">Pases por partido</p>
-                                <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.passesMadePerMatch" :decimal-places="0" class="inline"></count-up></p>
+                                <p class="self-center text-end text-primary text-lg"><count-up :end-val="player.passesMadePerMatch" :decimal-places="1" class="inline"></count-up></p>
                             </div>
                             <div class="divider p-0 m-0"></div>
                             <div class="font-semibold w-full flex content-center align-middle space-x-1 overflow-hidden">
