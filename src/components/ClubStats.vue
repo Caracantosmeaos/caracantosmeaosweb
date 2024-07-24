@@ -82,7 +82,7 @@
                 :auto-adjust-text-size="true"
                 >
                     <div>
-                        <count-up class="text-base-content font-bold text-4xl hover:text-6xl text-center" :end-val="gamesData.played"></count-up>
+                        <count-up class="text-base-content font-bold text-4xl text-center" :end-val="gamesData.played"></count-up>
                         <p>Partidos</p>
                     </div>
                 </vc-donut>
@@ -127,7 +127,6 @@
         losses: 0,
         ties: 0,
         played: 0
-
     })
 
 
@@ -138,12 +137,13 @@
             gamesData.losses = newStats.losses
             gamesData.ties = newStats.ties
             donutsections.value = [
-                {label:`Victorias:  ${gamesData.wins} (${trimDecimal(winsPercent.value)}%)`, value: winsPercent, color: '#00A96E'},
-                {label:`Derrotas:  ${gamesData.losses} (${trimDecimal(lossesPercent.value)}%)`, value: lossesPercent, color: '#FF5861'},
-                {label:`Empates:  ${gamesData.ties} (${trimDecimal(tiesPercent.value)}%)`, value: tiesPercent, color: '#A6ADBB'}
+                {label:`Victorias:  ${gamesData.wins} (${trimDecimal(winsPercent.value)}%)`, value: winsPercent.value, color: '#00A96E'},
+                {label:`Derrotas:  ${gamesData.losses} (${trimDecimal(lossesPercent.value)}%)`, value: lossesPercent.value, color: '#FF5861'},
+                {label:`Empates:  ${gamesData.ties} (${trimDecimal(tiesPercent.value)}%)`, value: tiesPercent.value, color: '#A6ADBB'}
             ]
         }
     })
+
 
     const winsPercent = computed( ()=>{
         return (gamesData.wins / gamesData.played) * 100
@@ -162,7 +162,6 @@
     function trimDecimal(decimal:number){
         return decimal.toFixed(0)
     }
-
 
     onBeforeMount(async ()=>{
         await statsService.fetch()

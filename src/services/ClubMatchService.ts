@@ -1,38 +1,36 @@
 import { ref, type Ref } from "vue";
 import FetchService from "@services/FetchService";
-import ClubMatch from "@models/match/ClubMatch";
+import ClubMatchEntity from "@/model/match/ClubMatchEntity";
 export default class ClubMatchService extends FetchService{
 
-    matchType: string
+    haserr: Ref<boolean> = ref(false)
 
-    constructor(type: string){
+    constructor(){
         super()
-        this.data = ref<Array<ClubMatch>>(undefined)
-        this.matchType = type
+        this.data = ref<Array<ClubMatchEntity>>(undefined)
     }
 
-    getData():Ref<Array<ClubMatch>>{
+    getData():Ref<Array<ClubMatchEntity>>{
         return this.data;
     }
 
-
     async fetch(): Promise<void>{
         try{
-            const url = "https://api.caracantosmeaos.club/club/matchHistory/"+this.matchType
+            const url = "https://api.caracantosmeaos.club/matches/"
             const response = await fetch(url)
             const json = await response.json()
             this.status.value = response.status           
             
-            if(this.status.value==200 && json.status==200){
-                let parsed:Array<ClubMatch> = []
+            if(this.status.value==200){
+                let parsed:Array<ClubMatchEntity> = []
                 for (var match in json.response){
-                    var parsedMatch = new ClubMatch(json.response[match])
+                    var parsedMatch = new ClubMatchEntity(json.response[match])
                     parsed.push(parsedMatch)
                 }
                 this.data.value = parsed;
-            }else this.error.value = response.statusText
+            }else this.error.value = json.status.message ?? response.statusText
         }catch(error){
-            console.log(error)
+            console.error(error)
             this.error.value = error
         }finally{
             this.isloading.value = false;

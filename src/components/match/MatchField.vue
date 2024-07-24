@@ -7,36 +7,36 @@
             <div class="flex items-center justify-center align-middle h-full w-full">
                 <div class="justify-self-start w-full flex justify-end">
                     <!-- Own Team -->
-                    <div class="indicator self-center p-2 m-2" v-if="match.ownClub.matchStats.redCards>0">
-                        <span class="indicator-item badge badge-neutral badge-xs">{{ match.ownClub.matchStats.redCards }}</span>
+                    <div class="indicator self-center p-2 m-2" v-if="match.localClub.matchStats.redCards>0">
+                        <span class="indicator-item badge badge-neutral badge-xs">{{ match.localClub.matchStats.redCards }}</span>
                         <div class="tooltip" :data-tip="getRedCardPlayers(true)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
                     </div>
-                    <p class="text-end self-center font-medium text-2xl hidden md:flex">{{match.ownClub.name}}</p>
+                    <p class="text-end self-center font-medium text-2xl hidden md:flex">{{match.localClub.name}}</p>
                     <p class="text-end font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 mr-1 rounded-2xl"
-                    :class=resultColor>{{ match.ownClub.matchStats.goals }}</p>
+                    :class=resultColor>{{ match.localClub.matchStats.goals }}</p>
                 </div>
                 <div class="self-center justify-self-center text-xl font-extrabold m-2 relative text-center">
                     :
                 </div>
                 <div class="justify-self-end w-full flex justify-start">
                     <!-- Rival Team -->
-                    <p class="text-start font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 ml-1 rounded-2xl">{{ match.opponentClub.matchStats.goals }}</p>
-                    <p class="text-start self-center font-medium text-2xl hidden md:flex">{{match.opponentClub.name}}</p>
-                    <div class="indicator self-center p-2 m-2" v-if="match.opponentClub.matchStats.redCards>0">
-                        <span class="indicator-item badge badge-neutral badge-xs">{{ match.opponentClub.matchStats.redCards }}</span>
+                    <p class="text-start font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 ml-1 rounded-2xl">{{ match.awayClub.matchStats.goals }}</p>
+                    <p class="text-start self-center font-medium text-2xl hidden md:flex">{{match.awayClub.name}}</p>
+                    <div class="indicator self-center p-2 m-2" v-if="match.awayClub.matchStats.redCards>0">
+                        <span class="indicator-item badge badge-neutral badge-xs">{{ match.awayClub.matchStats.redCards }}</span>
                         <div class="tooltip" :data-tip="getRedCardPlayers(false)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
                     </div>
                 </div>
             </div>
             <div class="flex items-center justify-center align-middle  w-full md:hidden">
                 <div class="justify-self-start w-full flex justify-end text-sm">
-                    {{ match.ownClub.name }}
+                    {{ match.localClub.name }}
                 </div>
                 <div class="self-center justify-self-center text-md font-extrabold mx-2 relative text-center">
                     VS
                 </div>
                 <div class="justify-self-end w-full flex justify-start text-sm">
-                    {{ match.opponentClub.name }}
+                    {{ match.awayClub.name }}
                 </div>
             </div>
             <div class="flex items-center justify-center mt-2 md:mt-0" v-if="match.winnerByDnf">
@@ -49,17 +49,17 @@
                 <div class="flex w-full mt-2 items-center flex-col mx-auto lg:px-48">
                     <table class="w-full min-w-full text-center">
                         <tbody>
-                            <tr class="" v-for="(stat, index) in match.ownClub.matchStats">
+                            <tr class="" v-for="(stat, index) in match.localClub.matchStats">
                                 <td class="py-2 flex text-end self-end justify-end font-semibold">
-                                    <p class="w-fit px-2 rounded-md text-end" :class="{'bg-base-300': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index],
-                                'font-bold': match.ownClub.matchStats[index]>match.opponentClub.matchStats[index]
-                            }">{{ trimDecimal(match.ownClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
+                                    <p class="w-fit px-2 rounded-md text-end" :class="{'bg-base-300': match.localClub.matchStats[index]>match.awayClub.matchStats[index],
+                                'font-bold': match.localClub.matchStats[index]>match.awayClub.matchStats[index]
+                            }">{{ trimDecimal(match.localClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
                                 </td>
                                 <td class="py-2 text-sm md:text-md lg:text-lg font-bold">{{ reverseStatStr2[index] }}</td>
                                 <td class="py-2 flex text-start self-start justify-start font-semibold">
-                                    <p class="w-fit px-2 rounded-md" :class="{'bg-base-300': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index],
-                                        'font-bold': match.opponentClub.matchStats[index]>match.ownClub.matchStats[index]
-                                    }">{{ trimDecimal(match.opponentClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
+                                    <p class="w-fit px-2 rounded-md" :class="{'bg-base-300': match.awayClub.matchStats[index]>match.localClub.matchStats[index],
+                                        'font-bold': match.awayClub.matchStats[index]>match.localClub.matchStats[index]
+                                    }">{{ trimDecimal(match.awayClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
                                 </td>
                             </tr>
                         </tbody>
@@ -83,11 +83,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(p,index) in match.ownClub.players">
+                                <tr v-for="(p,index) in match.localClub.players">
                                     <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
                                         'rounded-t-xl': index==0,
-                                        'rounded-b-xl': index+1==match.ownClub.players.length
-                                    }">{{ p.playername }}</td>
+                                        'rounded-b-xl': index+1==match.localClub.players.length
+                                    }">
+                                        <p class="inline-flex">
+                                            {{ p.playername }}
+                                            <div class="tooltip tooltip-right tooltip-primary" data-tip="Mejor del partido" v-if="p.manOfTheMatch">
+                                                <svg class="w-5 h-5 text-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 
+                                                    2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 
+                                                    3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                                                </svg>
+                                            </div>
+                                        </p>
+                                    </td>
                                     <td>{{ p.goals }}</td>
                                     <td>{{ p.assists }}</td>
                                     <td>{{ p.rating }}</td>
@@ -112,14 +123,25 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(p,index) in match.opponentClub.players">
+                                <tr v-for="(p,index) in match.awayClub.players">
                                     <td>{{ p.goals }}</td>
                                     <td>{{ p.assists }}</td>
                                     <td>{{ p.rating }}</td>
                                     <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
                                         'rounded-t-xl': index==0,
-                                        'rounded-b-xl': index+1==match.opponentClub.players.length
-                                    }">{{ p.playername }}</td>
+                                        'rounded-b-xl': index+1==match.awayClub.players.length
+                                    }">
+                                    <p class="inline-flex">
+                                        <div class="tooltip tooltip-left tooltip-primary" data-tip="Mejor del partido" v-if="p.manOfTheMatch">
+                                            <svg class="w-5 h-5 text-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 
+                                                2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 
+                                                3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                                            </svg>
+                                        </div>
+                                        {{ p.playername }}
+                                    </p>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -136,11 +158,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(p,index) in match.ownClub.players">
+                                <tr v-for="(p,index) in match.localClub.players">
                                     <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
                                         'rounded-t-xl': index==0,
-                                        'rounded-b-xl': index+1==match.ownClub.players.length
-                                    }">{{ p.playername }}</td>
+                                        'rounded-b-xl': index+1==match.localClub.players.length
+                                    }">
+                                        <p class="inline-flex">
+                                            {{ p.playername }}
+                                            <div class="tooltip tooltip-right tooltip-primary" data-tip="Mejor del partido" v-if="p.manOfTheMatch">
+                                                <svg class="w-5 h-5 text-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 
+                                                    2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 
+                                                    3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                                                </svg>
+                                            </div>
+                                        </p>
+                                    </td>
                                     <td>{{ p.goals }}</td>
                                     <td>{{ p.assists }}</td>
                                     <td>{{ p.rating }}</td>
@@ -158,11 +191,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(p,index) in match.opponentClub.players">
+                                <tr v-for="(p,index) in match.awayClub.players">
                                     <td class="font-semibold text-md text-primary p-1 bg-base-300" :class="{
                                         'rounded-t-xl': index==0,
-                                        'rounded-b-xl': index+1==match.opponentClub.players.length
-                                    }">{{ p.playername }}</td>
+                                        'rounded-b-xl': index+1==match.awayClub.players.length
+                                    }">
+                                        <p class="inline-flex">
+                                            {{ p.playername }}
+                                            <div class="tooltip tooltip-right tooltip-primary" data-tip="Mejor del partido" v-if="p.manOfTheMatch">
+                                                <svg class="w-5 h-5 text-primary" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 
+                                                    2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 
+                                                    3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
+                                                </svg>
+                                            </div>
+                                        </p>
+                                    </td>
                                     <td>{{ p.goals }}</td>
                                     <td>{{ p.assists }}</td>
                                     <td>{{ p.rating }}</td>
@@ -182,17 +226,17 @@
 </template>
 <script setup lang="ts">
     import { computed, ref } from 'vue';
-    import ClubMatch from '@models/match/ClubMatch'
-    import PlayerMatchStats from '@models/match/PlayerMatchStats'
+    import ClubMatchEntity from '@models/match/ClubMatchEntity'
+    import MatchPlayerEntity from '@models/match/MatchPlayerEntity'
     const props = defineProps<{
-        match: ClubMatch,
+        match: ClubMatchEntity,
         index: number
         key
     }>()
 
     const resultColor = {
-        'text-error': props.match.result==2,
-        'text-success': props.match.result==1
+        'text-error': props.match.result=="loose",
+        'text-success': props.match.result=="win"
     }
 
     const reverseStatStr2 = {
@@ -215,28 +259,28 @@
         }else return decimal
     }
 
-    function getRedCardPlayers(ownclub:boolean){
+    function getRedCardPlayers(localclub:boolean){
         var plist = []
-        if(ownclub){
-            for(var p in props.match.ownClub.players){
-                var parsedp:PlayerMatchStats = props.match.ownClub.players[p]
+        if(localclub){
+            for(var p in props.match.localClub.players){
+                var parsedp:MatchPlayerEntity = props.match.localClub.players[p]
                 if(parsedp.redCards!=0) plist.push(parsedp.playername);
             }
         }else{
-            for(var p in props.match.opponentClub.players){
-                var parsedp:PlayerMatchStats = props.match.opponentClub.players[p]
+            for(var p in props.match.awayClub.players){
+                var parsedp:MatchPlayerEntity = props.match.awayClub.players[p]
                 if(parsedp.redCards!=0) plist.push(parsedp.playername)
             }
         }
         return plist
     }
 
-    function getPlayerNames(ownclub:boolean){
+    function getPlayerNames(localClub:boolean){
         var plist = []
-        if(ownclub){
-            props.match.ownClub.players.forEach((p) => plist.push(p.playername));
+        if(localClub){
+            props.match.localClub.players.forEach((p) => plist.push(p.playername));
         }else{
-            props.match.opponentClub.players.forEach((p) => plist.push(p.playername));
+            props.match.awayClub.players.forEach((p) => plist.push(p.playername));
         }
         return plist
     }

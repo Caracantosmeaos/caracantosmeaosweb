@@ -1,7 +1,7 @@
 import { type Ref, ref } from "vue";
 export default abstract class FetchService {
     protected data: Ref<any>
-    protected status:Ref<Number>
+    public status:Ref<Number>
     protected error:Ref<String>
     public isloading:Ref<Boolean>
 

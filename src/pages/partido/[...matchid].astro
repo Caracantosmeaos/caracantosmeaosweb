@@ -1,0 +1,27 @@
+---
+export const prerender = false;
+
+import Layout from "@/layouts/Layout.astro"
+
+const {matchid} = Astro.params
+let finalMatchID:string = "" 
+
+if(matchid==undefined){
+	return Astro.redirect('/partidos');
+}
+---
+
+<Layout title="Caracantosmeaos Club: Detalles de Partido" isindex={false} description='Detalles del partido' 
+	keywords='fifa, eafc, fifa23, fifa24, eafc24, club, pro, clubespro, proclubs, caracantosmeaos, eltrueno, el_trueno, inicio, partido, stats, detalles, detail'>
+	<meta slot="metadata" property="og:url" content=`https://www.caracantosmeaos.club/partido/${matchid}`/>
+	<meta slot="metadata" property="og:image" content="https://www.caracantosmeaos.club/escudo_banner_fondo.jpg"/>
+	<meta slot="metadata" name="twitter:url" content="https://www.caracantosmeaos.club/partido"/>
+	<meta slot="metadata" name="twitter:image" content="https://www.caracantosmeaos.club/escudo_banner_fondo.jpg"/>
+
+    <header>
+
+    </header>
+    <section>
+
+    </section>
+</Layout>

@@ -10,7 +10,9 @@
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@models/*": ["./src/model/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@dtos/*": ["./src/dtos/*"]
     },
     "plugins": [
       {

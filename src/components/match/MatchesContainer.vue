@@ -7,47 +7,23 @@
                 </label>
             </div>
             <div class="flex flex-row justify-around items-center space-x-6 mt-4 lg:mt-0">
-                <div class="m-auto text-center align-middle">
-                    <label class="label cursor-pointer flex flex-col">
-                        <span class="label-text">Partidos de liga</span>
-                        <input type="radio" name="radioMatchType" id="league" value="league" 
-                        class="m-1 radio radio-primary radio-sm" v-model="radioMatchType" />
-                    </label>
-                </div>
-                <div class="m-auto text-center align-middle ">
-                    <label class="label cursor-pointer flex flex-col">
-                        <span class="label-text">Partidos de playoff</span>
-                        <input type="radio" name="radioMatchType" id="playoff" value="playoff" 
-                        class="m-1 radio radio-primary radio-sm" v-model="radioMatchType" />
-                    </label>
-                </div>
-                <div class="m-auto text-center align-middle ">
-                    <label class="label cursor-pointer flex flex-col">
-                        <span class="label-text">Todos</span>
-                        <input type="radio" name="radioMatchType" id="all" value="all" 
-                        class="m-1 radio radio-primary radio-sm" v-model="radioMatchType"/>
-                    </label>
+                <div class="form-control flex flex-wrap flex-col">
+                        <label class="label cursor-pointer">
+                            <span class="label-text p-2">Partidos de liga</span> 
+                            <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" v-model="leagueFilter" />  
+                        </label>
+                        <label class="label cursor-pointer">
+                            <span class="label-text p-2">Partidos de playoff</span> 
+                            <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" v-model="playoffFilter" />
+                        </label>
                 </div>
             </div>
         </header>
-        <div v-if="!hasError && (!isPlayoffLoading && !isLeagueLoading) && finalMatchList.length>0" class="mt-3 flex flex-row-reverse justify-end flex-wrap">
-            <div v-for="(match, index) in finalMatchList" :key="match.matchId" :match="match" :index="index" >
-                <div class="font-extrabold text-sm p-1 px-2 mx-1 rounded-lg"
-                :class="{
-                    'bg-error': match.result==2,
-                    'text-error-content': match.result==2,
-                    'bg-success': match.result==1,
-                    'text-success-content': match.result==1,
-                    'bg-neutral': match.result==0,
-                    'text-neutral-content': match.result==0
-                }"
-                >
-                 {{ firstChar(Result[match.result]) }}
-                </div>
-            </div>
+        <div v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" class="mt-3 flex flex-row-reverse justify-end flex-wrap">
+
         </div>
-        <div v-if="!hasError" role="contentinfo" class="mt-3 w-full p-3 lg:p-4 flex rounded-lg shadow-lg dark:shadow dark:bg-base-200">
-            <svg v-if="isPlayoffLoading || isLeagueLoading" class="footballloader" viewBox="0 0 866 866" xmlns="http://www.w3.org/2000/svg">
+        <div v-if="!hasErrorComputed" role="contentinfo" class="mt-3 w-full p-3 lg:p-4 flex rounded-lg shadow-lg dark:shadow dark:bg-base-200">
+            <svg v-if="isLoading" class="footballloader" viewBox="0 0 866 866" xmlns="http://www.w3.org/2000/svg">
                     <svg class="footballloader" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.83 151.5">
                         <path class="path-0 footballloader" d="M117.24,69.24A8,8,0,0,0,115.67,67c-4.88-4-9.8-7.89-14.86-11.62A4.93,4.93,0,0,0,96.93,55c-5.76,1.89-11.4,4.17-17.18,6a4.36,4.36,0,0,0-3.42,4.12c-1,6.89-2.1,13.76-3,20.66a4,4,0,0,0,1,3.07c5.12,4.36,10.39,8.61,15.68,12.76a3.62,3.62,0,0,0,2.92.75c6.29-2.66,12.52-5.47,18.71-8.36a3.49,3.49,0,0,0,1.68-2.19c1.34-7.25,2.54-14.55,3.9-22.58Z"
                             fill="#fed000" />
@@ -80,47 +56,47 @@
             </div>
         </div>
         <div v-else class="w-full">
-            <h3 class="text-center text-lg p-3">Ha ocurrido un error</h3>
+            <h3 class="text-center text-lg p-3">Ha ocurrido un error. Prueba de nuevo más tarde</h3>
+            <h3 class="text-center text-lg px-3 "><i>Más información: <a href="https://status.caracantosmeaos.club/">https://status.caracantosmeaos.club/</a></i></h3>
+            <div class="flex place-content-center p-6">
+                <img src="/illustrations/bugfixingsvg.svg" class="lg:w-1/4 w-full select-none pointer-events-none" alt="background decoration">
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { onBeforeMount, type Ref, ref, watch, computed, type ComputedRef, onMounted } from 'vue';
+    import { onBeforeMount, type Ref, ref, computed, type ComputedRef } from 'vue';
     import ClubMatchService from '@services/ClubMatchService';
-    import ClubMatch from '@models/match/ClubMatch'
-    import {Result} from '@models/match/ClubMatch'
+    import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
     import MatchField from './MatchField.vue';
 
-    const leagueMatchService = new ClubMatchService("league")
-    const leagueMatches:Ref<ClubMatch[]> = leagueMatchService.getData()
-    const leagueErrorText = leagueMatchService.getError()
-    const isLeagueLoading = leagueMatchService.isloading
-    const leagueHasError:Boolean = (leagueErrorText.value=='') ? false : true
+    const matchService = new ClubMatchService()
+    const matches:Ref<ClubMatchEntity[]> = matchService.getData()
+    const isLoading = matchService.isloading
+    const status = matchService.getStatus()
 
-    const playoffMatchService = new ClubMatchService("playoff")
-    const playoffMatches:Ref<ClubMatch[]> = playoffMatchService.getData()
-    const playoffErrorText = playoffMatchService.getError()
-    const isPlayoffLoading = playoffMatchService.isloading
-    const playoffHasError:Boolean = (playoffErrorText.value=='') ? false : true
-
-    const hasError = playoffHasError || leagueHasError
-
+    
 
     onBeforeMount(async ()=>{
-        //await playoffMatchService.fetch()
-        //await leagueMatchService.fetch()
-        await Promise.all([playoffMatchService.fetch(), leagueMatchService.fetch()])
+        await matchService.fetch()
     })
     const props = defineProps<{
         matchId: String
     }>()
 
-    const radioMatchType = ref("all");
     const IDFilter = ref(props.matchId.toString())
+    const leagueFilter = ref(true); const playoffFilter = ref(true);
+    const matchTypeFilter = computed(() => {
+        var filter = []
+        if(leagueFilter.value) filter.push("league")
+        if(playoffFilter.value) filter.push("playoff")
+        return filter
+    })
 
-    function handleFilters(list: ClubMatch[]){
+    function handleFilters(list: ClubMatchEntity[]){
         var filteredList = list.filter((el) => IDFilter.value.includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
+        filteredList = filteredList.filter( (el) => matchTypeFilter.value.includes(el.matchType))
         return filteredList
     }
 
@@ -128,18 +104,16 @@
         return str.charAt(0)
     }
 
-    function handleOrder(list: ClubMatch[]){
-        return list.sort((a:ClubMatch,b:ClubMatch) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0))
+    function handleOrder(list: ClubMatchEntity[]){
+        return list.sort((a:ClubMatchEntity,b:ClubMatchEntity) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0))
     }
 
     const finalMatchList = computed(() => {
-        if(radioMatchType.value==="league"){
-            return handleOrder(handleFilters(leagueMatches.value))
-        }else if(radioMatchType.value==="playoff"){
-            return handleOrder(handleFilters(playoffMatches.value))
-        }else{
-            return handleOrder(handleFilters(playoffMatches.value.concat(leagueMatches.value)))
-        }
+        return handleOrder(handleFilters(matches.value))
+    })
+
+    const hasErrorComputed = computed(()=>{
+        return (status.value!=200 && !isLoading.value)
     })
 </script>
 
