@@ -39,27 +39,32 @@
                     {{ match.awayClub.name }}
                 </div>
             </div>
-            <div class="flex items-center justify-center mt-2 md:mt-0" v-if="match.winnerByDnf">
-                <div class="badge badge-error badge-sm badge-outline">Desconexión</div>
+            <div class="flex items-center justify-center mt-2 mb-1 md:mt-0 w-full space-x-4">
+                <div v-if="match.winnerByDnf" class="badge badge-error badge-sm badge-outline">Desconexión</div>
+                <div class="badge badge-primary badge-sm  p-2">{{ resultMap[match.matchType] }}</div>
             </div>
         </div>
         <div class="collapse-content flex flex-col w-full h-full min-h-full px-2 justify-center align-middle items-center overflow-x-hidden">
             <article class="mt-4 w-full">
                 <header class="font-semibold text-lg md:text-xl text-primary text-center">RESUMEN DEL PARTIDO</header>
                 <div class="flex w-full mt-2 items-center flex-col mx-auto lg:px-48">
-                    <table class="w-full min-w-full text-center">
+                    <table class="w-full text-center lg:w-8/12">
                         <tbody>
-                            <tr class="" v-for="(stat, index) in match.localClub.matchStats">
-                                <td class="py-2 flex text-end self-end justify-end font-semibold">
-                                    <p class="w-fit px-2 rounded-md text-end" :class="{'bg-base-300': match.localClub.matchStats[index]>match.awayClub.matchStats[index],
-                                'font-bold': match.localClub.matchStats[index]>match.awayClub.matchStats[index]
-                            }">{{ trimDecimal(match.localClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
+                            <tr class="" v-for="(stat, index) in orderedMatchStats(true)">
+                                <td class="py-2 font-semibold w-1/12 lg:3/12">
+                                    <div class="w-full text-right">
+                                        <span class="w-fit px-2 rounded-md text-right" :class="{'bg-base-300': stat.stat>orderedMatchStats(false)[index].stat,
+                                            'font-bold': stat.stat>orderedMatchStats(false)[index].stat
+                                        }">{{ trimDecimal(stat.stat, 1) }}<span class="text-right" v-if='stat.name.includes("%")'>%</span></span>
+                                    </div>
                                 </td>
-                                <td class="py-2 text-sm md:text-md lg:text-lg font-bold">{{ reverseStatStr2[index] }}</td>
-                                <td class="py-2 flex text-start self-start justify-start font-semibold">
-                                    <p class="w-fit px-2 rounded-md" :class="{'bg-base-300': match.awayClub.matchStats[index]>match.localClub.matchStats[index],
-                                        'font-bold': match.awayClub.matchStats[index]>match.localClub.matchStats[index]
-                                    }">{{ trimDecimal(match.awayClub.matchStats[index], 1) }}<span v-if='reverseStatStr2[index].includes("%")'>%</span></p>
+                                <td class="py-2 text-sm md:text-md lg:text-lg font-bold text-center w-10/12 lg:6/12">{{ stat.name }}</td>
+                                <td class="py-2 font-semibold w-1/12 lg:3/12">
+                                    <div class="w-full">
+                                        <span class="w-fit px-2 rounded-md" :class="{'bg-base-300': orderedMatchStats(false)[index].stat>stat.stat,
+                                        'font-bold': orderedMatchStats(false)[index].stat>stat.stat
+                                        }">{{ trimDecimal(orderedMatchStats(false)[index].stat, 1) }}<span v-if='stat.name.includes("%")'>%</span></span>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -241,18 +246,53 @@
         'text-success': props.match.result=="win"
     }
 
-    const reverseStatStr2 = {
-        goals: "Goles",
-        shots: "Disparos",
-        shotSuccessRate: "Acierto disparos (%)",
-        passesMade: "Pases intentados",
-        passesSuccess: "Pases acertados",
-        passSuccessRate: "Acierto pases (%)",
-        redCards: "Tarjetas rojas",
-        tacklesMade: "Tacklees intentados",
-        tackleSuccess: "Tacklees acertados",
-        tackleSuccessRate: "Acierto tacklees (%)"
+    const resultMap = {
+        "league": "Liga",
+        "playoff": "Playoff"
     }
+
+    function orderedMatchStats(local: boolean){
+        var team = local ? "localClub": "awayClub"
+          return [
+            {
+                name: "Goles",
+                stat: props.match[team].matchStats.goals
+            },
+            {
+                name: "Disparos",
+                stat: props.match[team].matchStats.shots
+            },
+            {
+                name: "Acierto disparos (%)",
+                stat: props.match[team].matchStats.shotSuccessRate
+            },
+            {
+                name: "Pases intentados",
+                stat: props.match[team].matchStats.passesMade
+            },
+            {
+                name: "Pases acertados",
+                stat: props.match[team].matchStats.passesSuccess
+            },
+            {
+                name: "Tarjetas rojas",
+                stat: props.match[team].matchStats.redCards
+            },
+            {
+                name: "Tacklees intentados",
+                stat: props.match[team].matchStats.tacklesMade
+            },
+            {
+                name: "Tacklees acertados",
+                stat: props.match[team].matchStats.tackleSuccess
+            },
+            {
+                name: "Acierto tacklees (%)",
+                stat: props.match[team].matchStats.tackleSuccessRate
+            }
+        ]
+    }
+    
 
     function trimDecimal(decimal:number, trim:number){
         if(decimal.toString()==="NaN") return 0
