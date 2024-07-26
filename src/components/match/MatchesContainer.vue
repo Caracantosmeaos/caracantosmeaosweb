@@ -22,6 +22,11 @@
         <div v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" class="mt-3 flex flex-row-reverse justify-end flex-wrap">
 
         </div>
+        <div class="w-full flex justify-center lg:justify-normal">
+            <Paginator v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" 
+            :itemsCount="finalMatchList.length" :itemsPerPage="paginatorItemsPerPage" :currentPage="paginatorPage" :maxButtons="5" @pagechange="onPageChange"
+            />
+        </div>
         <div v-if="!hasErrorComputed" role="contentinfo" class="mt-3 w-full p-3 lg:p-4 flex rounded-lg shadow-lg dark:shadow dark:bg-base-200">
             <svg v-if="isLoading" class="footballloader" viewBox="0 0 866 866" xmlns="http://www.w3.org/2000/svg">
                     <svg class="footballloader" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164.83 151.5">
@@ -43,9 +48,9 @@
                         <path class="bb-9" fill="#fed000" d="M117.35,125c5.58-2.32,16.9-13.84,18.1-19.2-2.41,1.46-5.18,2.36-6.78,4.23-4.21,5-7.89,10.37-11.32,15Z" />
                     </svg>
             </svg>
-            <div v-else-if="finalMatchList.length>0" class="px-1 lg:px-4 w-full">
+            <div v-else-if="pagedMatchList.length>0" class="px-1 lg:px-4 w-full">
                 <TransitionGroup name="matchlist">
-                    <MatchField v-for="(match, index) in finalMatchList" :key="match.matchId" :match="match" :index="index" />
+                    <MatchField v-for="(match, index) in pagedMatchList" :key="match.matchId" :match="match" :index="index" />
                 </TransitionGroup>
             </div>
             <div v-else class="w-full">
@@ -70,20 +75,28 @@
     import ClubMatchService from '@services/ClubMatchService';
     import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
     import MatchField from './MatchField.vue';
+    import Paginator from '@components/Paginator.vue';
 
     const matchService = new ClubMatchService()
     const matches:Ref<ClubMatchEntity[]> = matchService.getData()
     const isLoading = matchService.isloading
     const status = matchService.getStatus()
 
-    
+    const paginatorPage = ref(1)
+    const paginatorItemsPerPage = 5
 
     onBeforeMount(async ()=>{
         await matchService.fetch()
     })
+
     const props = defineProps<{
         matchId: String
     }>()
+
+    
+    function onPageChange(pagenum:number){
+        paginatorPage.value = pagenum
+    }
 
     const IDFilter = ref(props.matchId.toString())
     const leagueFilter = ref(true); const playoffFilter = ref(true);
@@ -111,6 +124,13 @@
     const finalMatchList = computed(() => {
         return handleOrder(handleFilters(matches.value))
     })
+
+    const pagedMatchList = computed(() => {
+        const startIndex = (paginatorPage.value - 1) * paginatorItemsPerPage;
+        const endIndex = startIndex + paginatorItemsPerPage;
+        
+        return finalMatchList.value.slice(startIndex, endIndex);
+    });
 
     const hasErrorComputed = computed(()=>{
         return (status.value!=200 && !isLoading.value)

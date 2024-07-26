@@ -48,7 +48,7 @@
             <article class="mt-4 w-full">
                 <header class="font-semibold text-lg md:text-xl text-primary text-center">RESUMEN DEL PARTIDO</header>
                 <div class="flex w-full mt-2 items-center flex-col mx-auto lg:px-48">
-                    <table class="w-full text-center lg:w-8/12">
+                    <table class="w-full text-center md:w-10/12 xl:w-8/12">
                         <tbody>
                             <tr class="" v-for="(stat, index) in orderedMatchStats(true)">
                                 <td class="py-2 font-semibold w-1/12 lg:3/12">
