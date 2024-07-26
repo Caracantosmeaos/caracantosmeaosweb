@@ -3,7 +3,8 @@
         <header role="container" class="w-full py-4 px-6 flex flex-wrap justify-around items-center rounded-lg shadow-xl dark:shadow dark:bg-base-200">
             <div>
                 <label class="form-control  max-w-xs">
-                        <input type="text" placeholder="ID Partido" class="input input-bordered w-full max-w-xs" v-model="IDFilter"/>
+                        <input type="text" placeholder="ID Partido" class="input input-bordered w-full max-w-xs" v-model="IDFilter"
+                        @keydown="checkIDFilterInput($event)" pattern="^[a-zA-Z0-9]+$"/>
                 </label>
             </div>
             <div class="flex flex-row justify-around items-center space-x-6 mt-4 lg:mt-0">
@@ -117,6 +118,19 @@
         return str.charAt(0)
     }
 
+    function checkIDFilterInput(e){
+        var keyCode = (e.keyCode ? e.keyCode : e.which);
+        if ([46, 8, 9, 13, 110, 190].includes(keyCode) ||
+            ((e.keyCode == 65 || e.keyCode == 86 || e.keyCode == 67) && (e.ctrlKey === true || e.metaKey === true)) ||
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+            return;
+        }
+
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    }
+
     function handleOrder(list: ClubMatchEntity[]){
         return list.sort((a:ClubMatchEntity,b:ClubMatchEntity) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0))
     }
@@ -128,7 +142,7 @@
     const pagedMatchList = computed(() => {
         const startIndex = (paginatorPage.value - 1) * paginatorItemsPerPage;
         const endIndex = startIndex + paginatorItemsPerPage;
-        
+
         return finalMatchList.value.slice(startIndex, endIndex);
     });
 
