@@ -1,14 +1,17 @@
 <template>
     <div role="container" class="w-full lg:px-32">
-        <header role="container" class="w-full py-4 px-6 flex flex-wrap justify-around items-center rounded-lg shadow-xl dark:shadow dark:bg-base-200">
-            <div>
-                <label class="form-control  max-w-xs">
-                        <input type="text" placeholder="ID Partido" class="input input-bordered w-full max-w-xs" v-model="IDFilter"
-                        @keydown="checkIDFilterInput($event)" pattern="^[a-zA-Z0-9]+$"/>
-                </label>
-            </div>
-            <div class="flex flex-row justify-around items-center space-x-6 mt-4 lg:mt-0">
-                <div class="form-control flex flex-wrap flex-col">
+        <header role="container" class="w-full py-4 px-6 flex flex-wrap lg:flex-nowrap space-y-4 justify-around items-center h-fit rounded-lg shadow-xl dark:shadow dark:bg-base-200">
+                <div class="form-control flex h-full space-y-2 ">
+                    <span class="self-center font-semibold">Filtrar por ID</span>
+                    <input type="number" placeholder="ID Partido" class="input input-bordered w-full max-w-xs ring-" v-model="IDFilter"/>
+                </div>
+                <div class="flex flex-col space-y-2 lg:w-3/12">
+                    <span class="self-center font-semibold">Filtrar por fechas</span>
+                    <VueTailwindDatepicker i18n="es" v-model="dateFilter" class="w-full"
+                    as-single use-range :formatter="dateFormatter" :options="datePickerOptions" :shortcuts="false"></VueTailwindDatepicker>
+                </div>
+                <div class="form-control flex flex-col ">
+                        <span class="self-center font-semibold">Filtrar por tipo de partido</span>
                         <label class="label cursor-pointer">
                             <span class="label-text p-2">Partidos de liga</span> 
                             <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" v-model="leagueFilter" />  
@@ -18,7 +21,6 @@
                             <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" v-model="playoffFilter" />
                         </label>
                 </div>
-            </div>
         </header>
         <div v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" class="mt-3 flex flex-row-reverse justify-end flex-wrap">
 
@@ -77,6 +79,7 @@
     import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
     import MatchField from './MatchField.vue';
     import Paginator from '@components/Paginator.vue';
+    import VueTailwindDatepicker from "vue-tailwind-datepicker";
 
     const matchService = new ClubMatchService()
     const matches:Ref<ClubMatchEntity[]> = matchService.getData()
@@ -107,10 +110,33 @@
         if(playoffFilter.value) filter.push("playoff")
         return filter
     })
+    const dateFilter = ref({
+        startDate: "",
+        endDate: "",
+    });
+    const dateFormatter = ref({
+        date: 'DD/MM/YYYY',
+        month: 'MM'
+    })
+    const datePickerOptions = ref({
+    shortcuts: {
+        today: "Hoy",
+        yesterday: "Ayer",
+        past: (period) =>"Hace "+ period + " Días",
+        currentMonth: "Este mes",
+        pastMonth: "Mes pasado",
+    },
+    footer: {
+        apply: "Aplicar",
+        cancel: "Cancelar",
+    },
+});
 
     function handleFilters(list: ClubMatchEntity[]){
         var filteredList = list.filter((el) => IDFilter.value.includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
         filteredList = filteredList.filter( (el) => matchTypeFilter.value.includes(el.matchType))
+        filteredList = dateFilter.value.startDate!=="" && dateFilter.value.endDate!=="" 
+        ? filteredList.filter( (el) => (new Date(el.timestamp*1000).getTime() >= toDate(dateFilter.value.startDate).getTime() && new Date(el.timestamp*1000).getTime()<=toDate(dateFilter.value.endDate).getTime()) ) : filteredList
         return filteredList
     }
 
@@ -118,17 +144,14 @@
         return str.charAt(0)
     }
 
-    function checkIDFilterInput(e){
-        var keyCode = (e.keyCode ? e.keyCode : e.which);
-        if ([46, 8, 9, 13, 110, 190].includes(keyCode) ||
-            ((e.keyCode == 65 || e.keyCode == 86 || e.keyCode == 67) && (e.ctrlKey === true || e.metaKey === true)) ||
-            (e.keyCode >= 35 && e.keyCode <= 40)) {
-            return;
-        }
+    function toDate(isodate: string){
+        var splitted = isodate.split("/")
+        var utcd = splitted[2]+"-"+splitted[1]+"-"+splitted[0]
+        var d = new Date(utcd)
+        d.setHours(0)
+        d.setMinutes(0)
 
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
+        return new Date(d)
     }
 
     function handleOrder(list: ClubMatchEntity[]){
@@ -210,4 +233,16 @@ path.footballloader {
   opacity: 0;
   scale: 0;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 </style>
