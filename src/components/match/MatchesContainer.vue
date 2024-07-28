@@ -107,7 +107,7 @@
         paginatorPage.value = pagenum
     }
 
-    const IDFilter = ref(props.matchId.toString())
+    const IDFilter = ref(props.matchId.toString()??"")
     const leagueFilter = ref(props.matchTypeLeague);
     const playoffFilter = ref(props.matchTypePlayoff);
     const matchTypeFilter = computed(() => {
@@ -148,11 +148,16 @@
 
 
     function handleFilters(list: ClubMatchEntity[]){
-        var filteredList = list.filter((el) => IDFilter.value.includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
-        filteredList = filteredList.filter( (el) => matchTypeFilter.value.includes(el.matchType))
-        filteredList = dateFilter.value.startDate!=="" && dateFilter.value.endDate!=="" 
-        ? filteredList.filter( (el) => (new Date(el.timestamp*1000).getTime() >= toDate(dateFilter.value.startDate).getTime() && new Date(el.timestamp*1000).getTime()<=toDate(dateFilter.value.endDate).getTime()) ) : filteredList
-        return filteredList
+        try{
+            var filteredList = list.filter((el) => IDFilter.value.toString().includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
+            filteredList = filteredList.filter( (el) => matchTypeFilter.value.includes(el.matchType))
+            filteredList = dateFilter.value.startDate!=="" && dateFilter.value.endDate!=="" 
+            ? filteredList.filter( (el) => (new Date(el.timestamp*1000).getTime() >= toDate(dateFilter.value.startDate).getTime() && new Date(el.timestamp*1000).getTime()<=toDate(dateFilter.value.endDate).getTime()) ) : filteredList
+            return filteredList
+        }catch(e){
+            return []
+        }
+
     }
 
     function firstChar(str: string){
