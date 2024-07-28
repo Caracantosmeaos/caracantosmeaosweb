@@ -8,7 +8,8 @@
                 <div class="flex flex-col space-y-2 lg:w-3/12">
                     <span class="self-center font-semibold">Filtrar por fechas</span>
                     <VueTailwindDatepicker i18n="es" v-model="dateFilter" class="w-full"
-                    as-single use-range :formatter="dateFormatter" :options="datePickerOptions" :shortcuts="false" @keydown.prevent></VueTailwindDatepicker>
+                    as-single use-range :formatter="dateFormatter" :options="datePickerOptions" :shortcuts="false" @keypress.stop.prevent
+                    @keyup.stop.prevent @keydown.stop.prevent></VueTailwindDatepicker>
                 </div>
                 <div class="form-control flex flex-col ">
                         <span class="self-center font-semibold">Filtrar por tipo de partido</span>
@@ -94,7 +95,11 @@
     })
 
     const props = defineProps<{
-        matchId: String
+        matchId?: String,
+        matchTypeLeague?: boolean,
+        matchTypePlayoff?: boolean,
+        dateFrom?: String,
+        dateTo?: String
     }>()
 
     
@@ -103,7 +108,8 @@
     }
 
     const IDFilter = ref(props.matchId.toString())
-    const leagueFilter = ref(true); const playoffFilter = ref(true);
+    const leagueFilter = ref(props.matchTypeLeague);
+    const playoffFilter = ref(props.matchTypePlayoff);
     const matchTypeFilter = computed(() => {
         var filter = []
         if(leagueFilter.value) filter.push("league")
@@ -111,8 +117,8 @@
         return filter
     })
     const dateFilter = ref({
-        startDate: "",
-        endDate: "",
+        startDate: props.dateFrom.toString(),
+        endDate: props.dateTo.toString(),
     });
     const dateFormatter = ref({
         date: 'DD/MM/YYYY',
