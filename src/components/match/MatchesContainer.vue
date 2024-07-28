@@ -8,7 +8,7 @@
                 <div class="flex flex-col space-y-2 lg:w-3/12">
                     <span class="self-center font-semibold">Filtrar por fechas</span>
                     <VueTailwindDatepicker i18n="es" v-model="dateFilter" class="w-full"
-                    as-single use-range :formatter="dateFormatter" :options="datePickerOptions" :shortcuts="false"></VueTailwindDatepicker>
+                    as-single use-range :formatter="dateFormatter" :options="datePickerOptions" :shortcuts="false" @keydown.prevent></VueTailwindDatepicker>
                 </div>
                 <div class="form-control flex flex-col ">
                         <span class="self-center font-semibold">Filtrar por tipo de partido</span>
@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts" setup>
-    import { onBeforeMount, type Ref, ref, computed, type ComputedRef } from 'vue';
+    import { onBeforeMount, type Ref, ref, computed, watch, type ComputedRef } from 'vue';
     import ClubMatchService from '@services/ClubMatchService';
     import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
     import MatchField from './MatchField.vue';
@@ -130,7 +130,16 @@
         apply: "Aplicar",
         cancel: "Cancelar",
     },
-});
+    });
+    
+    //watch for filter changes and reset pagination
+    watch(
+        [IDFilter,dateFilter,matchTypeFilter],
+        () =>{
+            paginatorPage.value = 1
+        }
+    )
+
 
     function handleFilters(list: ClubMatchEntity[]){
         var filteredList = list.filter((el) => IDFilter.value.includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
