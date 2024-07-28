@@ -13,14 +13,15 @@
                     </div>
                     <p class="text-end self-center font-medium text-2xl hidden md:flex">{{match.localClub.name}}</p>
                     <p class="text-end font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 mr-1 rounded-2xl"
-                    :class=resultColor>{{ match.localClub.matchStats.goals }}</p>
+                    :class=resultColorLocal>{{ match.localClub.matchStats.goals }}</p>
                 </div>
                 <div class="self-center justify-self-center text-xl font-extrabold m-2 relative text-center">
                     :
                 </div>
                 <div class="justify-self-end w-full flex justify-start">
                     <!-- Rival Team -->
-                    <p class="text-start font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 ml-1 rounded-2xl">{{ match.awayClub.matchStats.goals }}</p>
+                    <p class="text-start font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 ml-1 rounded-2xl"
+                    :class=resultColorAway>{{ match.awayClub.matchStats.goals }}</p>
                     <p class="text-start self-center font-medium text-2xl hidden md:flex">{{match.awayClub.name}}</p>
                     <div class="indicator self-center p-2 m-2" v-if="match.awayClub.matchStats.redCards>0">
                         <span class="indicator-item badge badge-neutral badge-xs">{{ match.awayClub.matchStats.redCards }}</span>
@@ -241,9 +242,14 @@
         key
     }>()
 
-    const resultColor = {
-        'text-error': props.match.result=="loose",
-        'text-success': props.match.result=="win"
+    const resultColorLocal = {
+        'text-error': props.match.result=="loose" && props.match.localTeam,
+        'text-success': props.match.result=="win" && props.match.localTeam
+    }
+
+    const resultColorAway = {
+        'text-error': props.match.result=="loose" && !props.match.localTeam,
+        'text-success': props.match.result=="win" && !props.match.localTeam
     }
 
     const resultMap = {
