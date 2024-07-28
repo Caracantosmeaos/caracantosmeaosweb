@@ -48,20 +48,20 @@
             <article class="mt-4 w-full">
                 <header class="font-semibold text-lg md:text-xl text-primary text-center">RESUMEN DEL PARTIDO</header>
                 <div class="flex w-full mt-2 items-center flex-col mx-auto lg:px-48">
-                    <table class="w-full text-center md:w-10/12 xl:w-8/12">
+                    <table class="w-full text-center px-1 table-fixed md:w-10/12 xl:w-8/12">
                         <tbody>
                             <tr class="" v-for="(stat, index) in orderedMatchStats(true)">
-                                <td class="py-2 font-semibold w-1/12 lg:3/12">
+                                <td class="py-2 font-semibold w-3/12 ">
                                     <div class="w-full text-right">
                                         <span class="w-fit px-2 rounded-md text-right" :class="{'bg-base-300': stat.stat>orderedMatchStats(false)[index].stat,
                                             'font-bold': stat.stat>orderedMatchStats(false)[index].stat
                                         }">{{ trimDecimal(stat.stat, 1) }}<span class="text-right" v-if='stat.name.includes("%")'>%</span></span>
                                     </div>
                                 </td>
-                                <td class="py-2 text-sm md:text-md lg:text-lg font-bold text-center w-10/12 lg:6/12">{{ stat.name }}</td>
-                                <td class="py-2 font-semibold w-1/12 lg:3/12">
-                                    <div class="w-full">
-                                        <span class="w-fit px-2 rounded-md" :class="{'bg-base-300': orderedMatchStats(false)[index].stat>stat.stat,
+                                <td class="py-2 text-sm md:text-md lg:text-lg font-bold text-center w-6/12 px-2">{{ stat.name }}</td>
+                                <td class="py-2 font-semibold w-3/12 ">
+                                    <div class="w-full text-left">
+                                        <span class="w-fit px-2 rounded-md text-left" :class="{'bg-base-300': orderedMatchStats(false)[index].stat>stat.stat,
                                         'font-bold': orderedMatchStats(false)[index].stat>stat.stat
                                         }">{{ trimDecimal(orderedMatchStats(false)[index].stat, 1) }}<span v-if='stat.name.includes("%")'>%</span></span>
                                     </div>
@@ -153,10 +153,10 @@
                     </div>
                 </div>
                 <div class="lg:hidden flex flex-col w-full justify-center align-middle items-center mt-2">
-                    <table class="w-full md:w-10/12 text-center self-center justify-center">
+                    <table class="w-full md:w-10/12 text-center self-center justify-center table-fixed">
                             <thead class="bg-base-300 rounded-xl table-fixed">
                                 <tr class="bg-base-300 rounded-xl">
-                                    <th class="bg-base-100 invisible w-5/12"></th>
+                                    <th class="bg-base-100 invisible w-6/12"></th>
                                     <th class="p-2  rounded-s-xl ">Gol</th>
                                     <th class="p-2  ">Asis</th>
                                     <th class="p-2  rounded-e-xl ">Val</th>
@@ -187,10 +187,10 @@
                             </tbody>
                     </table>
                     <div class="divider w-full px-2">VS</div>
-                    <table class="w-full md:w-10/12 text-center self-center justify-center">
-                            <thead class="bg-base-300 rounded-xl">
+                    <table class="w-full md:w-10/12 text-center self-center justify-center table-fixed">
+                            <thead class="bg-base-300 rounded-xl table-fixed">
                                 <tr class="bg-base-300 rounded-xl">
-                                    <th class="bg-base-100 invisible w-5/12"></th>
+                                    <th class="bg-base-100 invisible w-6/12"></th>
                                     <th class="p-2 rounded-s-xl">Gol</th>
                                     <th class="p-2">Asis</th>
                                     <th class="p-2 rounded-e-xl">Val</th>
