@@ -1,27 +1,29 @@
 <template>
     <div role="container" class="w-full lg:px-32">
-        <header role="container" class="w-full py-4 px-6 flex flex-wrap lg:flex-nowrap space-y-4 justify-around items-center h-fit rounded-lg shadow-xl dark:shadow dark:bg-base-200">
-                <div class="form-control flex h-full space-y-2 ">
-                    <span class="self-center font-semibold">Filtrar por ID</span>
-                    <input type="number" placeholder="ID Partido" class="input input-bordered w-full max-w-xs ring-" v-model="IDFilter"/>
+        <header role="container" class="w-full py-4 px-6 h-full rounded-lg shadow-xl dark:shadow dark:bg-base-200">
+            <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-10 justify-around items-center h-full">
+                <div class="form-control flex flex-col h-full justify-between">
+                    <span class="text-center font-semibold">Filtrar por ID</span>
+                    <input type="number" placeholder="ID Partido" class="input input-bordered w-full" v-model="IDFilter"/>
                 </div>
-                <div class="flex flex-col space-y-2 lg:w-3/12">
-                    <span class="self-center font-semibold">Filtrar por fechas</span>
+                <div class="flex flex-col h-full justify-between">
+                    <span class="text-center font-semibold">Filtrar por fechas</span>
                     <VueTailwindDatepicker i18n="es" v-model="dateFilter" class="w-full"
                     as-single use-range :formatter="dateFormatter" :options="datePickerOptions" :shortcuts="false" @keypress.stop.prevent
                     @keyup.stop.prevent @keydown.stop.prevent></VueTailwindDatepicker>
                 </div>
-                <div class="form-control flex flex-col ">
-                        <span class="self-center font-semibold">Filtrar por tipo de partido</span>
-                        <label class="label cursor-pointer">
+                <div class="form-control flex flex-col h-full justify-between ">
+                        <span class="text-center font-semibold">Filtrar por tipo de partido</span>
+                        <label class="label cursor-pointer h-full">
                             <span class="label-text p-2">Partidos de liga</span> 
                             <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" v-model="leagueFilter" />  
                         </label>
-                        <label class="label cursor-pointer">
-                            <span class="label-text p-2">Partidos de playoff</span> 
-                            <input type="checkbox" class="checkbox checkbox-sm checkbox-primary" v-model="playoffFilter" />
+                        <label class="label cursor-pointer h-full pb-0">
+                            <span class="label-text p-2 pb-0">Partidos de playoff</span> 
+                            <input type="checkbox" class="checkbox checkbox-sm checkbox-primary pb-0" v-model="playoffFilter" />
                         </label>
                 </div>
+            </div>
         </header>
         <div v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" class="mt-3 flex flex-row-reverse justify-end flex-wrap">
 
@@ -152,7 +154,7 @@
             var filteredList = list.filter((el) => IDFilter.value.toString().includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
             filteredList = filteredList.filter( (el) => matchTypeFilter.value.includes(el.matchType))
             filteredList = dateFilter.value.startDate!=="" && dateFilter.value.endDate!=="" 
-            ? filteredList.filter( (el) => (new Date(el.timestamp*1000).getTime() >= toDate(dateFilter.value.startDate).getTime() && new Date(el.timestamp*1000).getTime()<=toDate(dateFilter.value.endDate).getTime()) ) : filteredList
+            ? filteredList.filter( (el) => (new Date(el.timestamp*1000).getTime() >= toDate(dateFilter.value.startDate).getTime() && new Date(el.timestamp*1000).getTime()<=toDate(dateFilter.value.endDate, true).getTime()) ) : filteredList
             return filteredList
         }catch(e){
             return []
@@ -164,12 +166,12 @@
         return str.charAt(0)
     }
 
-    function toDate(isodate: string){
+    function toDate(isodate: string, end?: boolean){
         var splitted = isodate.split("/")
         var utcd = splitted[2]+"-"+splitted[1]+"-"+splitted[0]
         var d = new Date(utcd)
-        d.setHours(0)
-        d.setMinutes(0)
+        d.setHours(end ? 23 : 0)
+        d.setMinutes(end ? 59 : 0)
 
         return new Date(d)
     }

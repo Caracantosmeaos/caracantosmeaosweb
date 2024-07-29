@@ -23,7 +23,7 @@ export default {
 				},
 				'vtd-secondary': {
 					'50': "#f9fafb",
-					'100': "#f3f4f6",
+					'100': "#A6ADBB",
 					'200': "#e5e7eb",
 					'300': "#d1d5db",
 					'400': "#9ca3af",
