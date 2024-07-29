@@ -56,7 +56,7 @@
             </svg>
             <div v-else-if="pagedMatchList.length>0" class="px-1 lg:px-4 w-full">
                 <TransitionGroup name="matchlist">
-                    <MatchField v-for="(match, index) in pagedMatchList" :key="match.matchId" :match="match" :index="index" />
+                    <MatchField v-for="(match, index) in pagedMatchList" :key="match.matchId" :match="match" :index="index"/>
                 </TransitionGroup>
             </div>
             <div v-else class="w-full">

@@ -1,5 +1,5 @@
 <template>
-    <div :id="match.matchId.toString()" tabindex="0" class="collapse collapse-arrow border-base-200 bg-base-100 border my-3 w-full min-w-full shadow-lg dark:shadow overflow-x-hidden">
+    <div :id="match.matchId.toString()" tabindex="0" class="collapse collapse-arrow border-base-200 bg-base-100 border my-3 w-full min-w-full shadow-lg dark:shadow">
         <div class="collapse-title flex flex-col w-full min-w-full px-2 py-0">
             <div class="flex items-center justify-center">
                 <div class="badge badge-ghost badge-sm">{{ timestampToStr(match.timestamp) }}</div>
@@ -9,7 +9,7 @@
                     <!-- Own Team -->
                     <div class="indicator self-center p-2 m-2" v-if="match.localClub.matchStats.redCards>0">
                         <span class="indicator-item badge badge-neutral badge-xs">{{ match.localClub.matchStats.redCards }}</span>
-                        <div class="tooltip" :data-tip="getRedCardPlayers(true)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
+                        <div class="tooltip tooltip-right lg:tooltip-bottom" :data-tip="getRedCardPlayers(true)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
                     </div>
                     <p class="text-end self-center font-medium text-2xl hidden md:flex">{{match.localClub.name}}</p>
                     <p class="text-end font-extrabold text-4xl bg-base-200 dark:bg-base-300 justify-self-end self-end p-4 m-4 mr-1 rounded-2xl"
@@ -25,7 +25,7 @@
                     <p class="text-start self-center font-medium text-2xl hidden md:flex">{{match.awayClub.name}}</p>
                     <div class="indicator self-center p-2 m-2" v-if="match.awayClub.matchStats.redCards>0">
                         <span class="indicator-item badge badge-neutral badge-xs">{{ match.awayClub.matchStats.redCards }}</span>
-                        <div class="tooltip" :data-tip="getRedCardPlayers(false)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
+                        <div class="tooltip tooltip-left lg:tooltip-bottom" :data-tip="getRedCardPlayers(false)"><div class="grid h-6 w-4 place-items-center bg-error rounded-sm"></div></div>
                     </div>
                 </div>
             </div>
