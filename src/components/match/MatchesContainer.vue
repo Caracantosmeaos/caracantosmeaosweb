@@ -78,13 +78,13 @@
 
 <script lang="ts" setup>
     import { onBeforeMount, type Ref, ref, computed, watch, type ComputedRef } from 'vue';
-    import ClubMatchService from '@services/ClubMatchService';
+    import ClubMatchesService from '@services/ClubMatchesService';
     import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
     import MatchField from './MatchField.vue';
     import Paginator from '@components/Paginator.vue';
     import VueTailwindDatepicker from "vue-tailwind-datepicker";
 
-    const matchService = new ClubMatchService()
+    const matchService = new ClubMatchesService()
     const matches:Ref<ClubMatchEntity[]> = matchService.getData()
     const isLoading = matchService.isloading
     const status = matchService.getStatus()
@@ -267,4 +267,4 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-</style>
+</style>ClubMatchesServiceClubMatchesService
