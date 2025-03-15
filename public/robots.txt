@@ -1,7 +1,10 @@
 User-agent: *
 Disallow: /404
 Disallow: /404.html
-Disallow: /partido
+
 Allow: /partidos
+Disallow: /partido
+
+Disallow: /imagegenerator
 
 Sitemap: https://www.caracantosmeaos.club/sitemap.xml
