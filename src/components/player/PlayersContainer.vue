@@ -183,7 +183,7 @@
 
     const positionFilter = computed(() => {
         var posFilter = []
-        if(gkPosFilter.value) posFilter.push("Portero")
+        if(gkPosFilter.value) posFilter.push("Guardameta")
         if(defPosFilter.value) posFilter.push("Defensa")
         if(mcPosFilter.value) posFilter.push("Centrocampista")
         if(fwPosFilter.value) posFilter.push("Delantero")
