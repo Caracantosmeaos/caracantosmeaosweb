@@ -105,7 +105,7 @@
 <script lang="ts" setup>
     import { onBeforeMount, type Ref, ref, watch, computed, type ComputedRef, onMounted } from 'vue';
     import ClubMembersService from '@services/ClubMembersService';
-    import ClubMember from '@models/ClubMember'
+    import ClubMember from '@/model/ClubMemberEntity'
     import PlayerField from '@components/player/PlayerField.vue';
     import PlayerDetailModal from '@components/player/PlayerDetailModal.vue';
 
@@ -168,7 +168,7 @@
     const gkPosFilter = ref(true); const defPosFilter = ref(true); const mcPosFilter = ref(true); const fwPosFilter = ref(true)
 
     function handleFilters(){
-        var filteredMembers = members.value.filter((el) => el.name.toLowerCase().includes(nameFilter.value.toLowerCase()) || el.proName.toLowerCase().includes(nameFilter.value.toLowerCase()));
+        var filteredMembers = members.value.filter((el) => el.playerName.toLowerCase().includes(nameFilter.value.toLowerCase()) || el.proName.toLowerCase().includes(nameFilter.value.toLowerCase()));
         filteredMembers = filteredMembers.filter((el) => positionFilter.value.includes(el.favoritePosition))
         filteredMembers = filteredMembers.filter((el) => el.proOverall>=overallFilter.value)
         return filteredMembers
@@ -183,10 +183,10 @@
 
     const positionFilter = computed(() => {
         var posFilter = []
-        if(gkPosFilter.value) posFilter.push("Guardameta")
-        if(defPosFilter.value) posFilter.push("Defensa")
-        if(mcPosFilter.value) posFilter.push("Centrocampista")
-        if(fwPosFilter.value) posFilter.push("Delantero")
+        if(gkPosFilter.value) posFilter.push("goalkeeper")
+        if(defPosFilter.value) posFilter.push("defender")
+        if(mcPosFilter.value) posFilter.push("midfielder")
+        if(fwPosFilter.value) posFilter.push("forward")
         return posFilter
     })
 
@@ -213,7 +213,7 @@
         if(preDetailedPL.value!=null) p = preDetailedPL.value
         else{
             if(props.detailPlayerName!=""){
-             p = members.value.filter((el) => el.name.toLowerCase() == props.detailPlayerName.toLowerCase() )[0]
+             p = members.value.filter((el) => el.playerName.toLowerCase() == props.detailPlayerName.toLowerCase() )[0]
             if(!p){
                 window.location.href = '.';
             }

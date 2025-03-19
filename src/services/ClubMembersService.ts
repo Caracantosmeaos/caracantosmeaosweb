@@ -1,14 +1,14 @@
 import { ref, type Ref } from "vue";
 import FetchService from "@services/FetchService";
-import ClubMember from "@models/ClubMember";
+import ClubMemberEntity from "@/model/ClubMemberEntity";
 export default class ClubMembersService extends FetchService{
 
     constructor(){
         super()
-        this.data = ref<Array<ClubMember>>(undefined)
+        this.data = ref<Array<ClubMemberEntity>>(undefined)
     }
 
-    getData():Ref<Array<ClubMember>>{
+    getData():Ref<Array<ClubMemberEntity>>{
         return this.data;
     }
 
@@ -20,14 +20,14 @@ export default class ClubMembersService extends FetchService{
             const json = await response.json()
             this.status.value = response.status           
             
-            if(this.status.value==200 && json.status==200){
-                let parsed:Array<ClubMember> = []
+            if(this.status.value==200){
+                let parsed:Array<ClubMemberEntity> = []
                 for (var member in json.response){
-                    var parsedMember = new ClubMember(json.response[member])
+                    var parsedMember = new ClubMemberEntity(json.response[member])
                     parsed.push(parsedMember)
                 }
                 this.data.value = parsed;
-            }else this.error.value = response.statusText
+            }else this.error.value = response.statusText;
         }catch(error){
             console.log(error)
             this.error.value = error

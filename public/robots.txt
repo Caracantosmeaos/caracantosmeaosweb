@@ -3,7 +3,7 @@ Disallow: /404
 Disallow: /404.html
 
 Allow: /partidos
-Disallow: /partido
+Disallow: /partido$
 
 Disallow: /imagegenerator
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, onMounted, ref} from 'vue';
-    import ClubMember from '@models/ClubMember'
+    import ClubMember from '@/model/ClubMemberEntity'
     import CountUp from 'vue-countup-v3'
     const dialog = ref<HTMLDialogElement>();
     const props = defineProps<{
@@ -22,7 +22,7 @@
 
 
     const fullImage = computed(() => {
-        return `/players/${props.player.name}_full_transp.png`
+        return `/players/${props.player.playerName}_full_transp.png`
     })
 
     function defaultFullImage(e){
@@ -31,7 +31,6 @@
 
 
     onMounted(async ()=>{
-        console.log(props.player)
         showModal()
     })
 
@@ -43,8 +42,8 @@
                 <button class="btn btn-sm btn-circle btn-ghost fixed right-1 top-1">✕</button>
             </form>
             <header>
-                <h3 class="font-bold text-xl text-primary text-center">{{ player.name }} <span class="font-semibold text-lg text-base-content">({{ player.proName }})</span></h3>
-                <h4 class="text-md text-center">{{ player.favoritePosition }} <span class="font-semibold">({{ player.proOverall }})</span></h4>
+                <h3 class="font-bold text-xl text-primary text-center">{{ player.playerName }} <span class="font-semibold text-lg text-base-content">({{ player.proName }})</span></h3>
+                <h4 class="text-md text-center">{{ player.favoritePositionEnum }} <span class="font-semibold">({{ player.proOverall }})</span></h4>
             </header>
             <section >
                 <div class="relative flex container w-full h-96  p-2 overflow-visible">

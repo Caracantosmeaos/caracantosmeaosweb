@@ -11,7 +11,7 @@
             :class="{
                     'plextrainfo-opened': hovered
                 }">
-                <p class="font-bold text-2xl">{{ player.name }}
+                <p class="font-bold text-2xl">{{ player.playerName }}
                 
                 <svg class="w-6 fixed top-2 right-0 animate-bounce" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
                 :class="{
@@ -21,7 +21,7 @@
                 </svg>
                 </p>
                 <div role="contentinfo">
-                    <p class="text-secondary dark:text-primary font-semibold text-xl">{{ player.favoritePosition }}</p>
+                    <p class="text-secondary dark:text-primary font-semibold text-xl">{{ player.favoritePositionEnum }}</p>
                 </div>
                 <div class="plextrainfo-container " >
                     <div class="divider px-4 my-1"></div>
@@ -36,7 +36,7 @@
                             <div class="w-full">
                                 <p><strong>Motm: </strong>{{ player.manOfTheMatch }}</p>
                                 <p><strong>Asistencias: </strong>{{ player.assists }}</p>
-                                <p><strong>Acierto pases: </strong>{{ player.passSuccessRate }}%</p>
+                                <p><strong>Acierto pases: </strong>{{ Math.round(player.passSuccessRate) }}%</p>
                                 <p><strong>Rojas: </strong>{{ player.redCards }}</p>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
 </template>
 <script setup lang="ts">
     import { computed, ref } from 'vue';
-    import ClubMember from '@models/ClubMember';
+    import ClubMember from '@/model/ClubMemberEntity';
     const props = defineProps<{
         player: ClubMember,
         index: number
@@ -73,7 +73,7 @@
 
 
     const topImage = computed(() => {
-        return `/players/${props.player.name}_top_transp.png`
+        return `/players/${props.player.playerName}_top_transp.png`
     })
 
     function defaultTopImage(e){
