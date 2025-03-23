@@ -85,11 +85,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, onBeforeMount, onMounted, computed } from 'vue';
+import { ref, type Ref, onBeforeMount, computed } from 'vue';
 import ClubMatchService from '@services/ClubMatchService';
 import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
-import type { IMatchPlayer } from '@/interfaces/matchPlayer.interface';
-import type MatchPlayerEntity from '@/model/match/MatchPlayerEntity';
 
 const props = defineProps<{
         matchId: number
@@ -117,10 +115,6 @@ const resultColor = computed((local?)=>{
     return resp
 })
 
-const topImage = computed((playername) => {
-        return `/players/${playername}_full_transp.png`
-})
-
 const sortedPlayers = computed(() => {
     const plys = match.value.localTeam ? match.value.localClub.players : match.value.awayClub.players
 
@@ -142,18 +136,6 @@ function defaultTopImage(e){
         e.target.src = '/players/placeholder_full_transp.png'
     }
 
-onBeforeMount(async ()=>{
-    await matchService.fetch()
-
-    resultColorLocal = {
-        'text-error': match.value.result=="loose" && match.value.localTeam,
-        'text-success': match.value.result=="win" && match.value.localTeam
-    }   
-    resultColorAway = {
-        'text-error': match.value.result=="loose" && !match.value.localTeam,
-        'text-success': match.value.result=="win" && !match.value.localTeam
-    }
-})
 </script>
 
 <style scoped>
