@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, onBeforeMount, computed } from 'vue';
+import { ref, type Ref, computed } from 'vue';
 import ClubMatchService from '@services/ClubMatchService';
 import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
 
@@ -103,9 +103,6 @@ Object.keys(Result).forEach((pos: Result) => {
 const modeValue: string = Result[pos as any];
 reverseResult.set(modeValue, pos);
 });
-
-let resultColorLocal, resultColorAway
-
 
 const resultColor = computed((local?)=>{
     let resp = {
