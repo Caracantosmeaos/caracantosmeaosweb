@@ -1,8 +1,21 @@
 <template>
     <div v-if="status==200">
-        <div id="to_image" class="toimage bg-primary flex w-full flex-initial overflow-hidden" v-if="!isLoading">
+        <div id="to_image" class="toimage flex w-full flex-initial overflow-hidden" v-if="!isLoading">
             <div class="w-7/12 flex-initial flex flex-col">
                 <p class="w-full text-9xl font-extrabold text-center" :class="resultColor">{{ reverseResult.get(match.result).toUpperCase() }}</p>
+                <div class="my-2 w-full flex-initial flex p-1 h-full flex-nowrap items-center place-content-evenly">
+                    <div v-for="p in sortedPlayers" class="text-3xl text-center">
+                        <div class="backdrop-blur-md bg-base-300/50 mx-6 rounded-xl">
+                            <div class="flex w-full text-center self-centeralign-middle place-content-center">
+                                <svg  v-if="p.manOfTheMatch" xmlns="http://www.w3.org/2000/svg" class="mr-1 w-10 h-11 text-primary" width="24" height="24" fill="currentColor" viewBox="0 -960 960 960" ><path d="m363-310 117-71 117 71-31-133 104-90-137-11-53-126-53 126-137 11 104 90-31 133ZM480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-112 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/></svg>
+                                <p class="text-primary font-semibold text-center">{{ p.playername }}</p>
+                            </div>
+                            <p class="text-neutral-content">{{ p.rating }}</p>
+                        </div>
+                        <img :src="'/players/' + p.playername + '_full_transp.png'" class="" alt="Player ingame photo" 
+                        @error="defaultTopImage"/>
+                    </div>
+                </div>
             </div>
             <div class="w-5/12 h-full min-h-full max-h-full flex flex-col flex-initial justify-stretch backdrop-blur-md bg-base-300/75 rounded-l-2xl overflow-hidden">
                 <div class="w-full grid grid-cols-12 grid-rows-1 content-center justify-center items-center bg-base-300 dark:bg-base-100">
@@ -75,6 +88,8 @@
 import { ref, type Ref, onBeforeMount, onMounted, computed } from 'vue';
 import ClubMatchService from '@services/ClubMatchService';
 import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
+import type { IMatchPlayer } from '@/interfaces/matchPlayer.interface';
+import type MatchPlayerEntity from '@/model/match/MatchPlayerEntity';
 
 const props = defineProps<{
         matchId: number
@@ -97,10 +112,35 @@ let resultColorLocal, resultColorAway
 const resultColor = computed((local?)=>{
     let resp = {
         'text-error': match.value.result=="loose",
-        'text-success': match.value.result=="win"
+        'text-lime-500': match.value.result=="win"
     }
     return resp
 })
+
+const topImage = computed((playername) => {
+        return `/players/${playername}_full_transp.png`
+})
+
+const sortedPlayers = computed(() => {
+    const plys = match.value.localTeam ? match.value.localClub.players : match.value.awayClub.players
+
+    const mvpPl = plys.find(item => item.manOfTheMatch);
+    const filteredPlys = plys.filter(item => !item.manOfTheMatch);
+
+    if (mvpPl) {
+        const middleIndex = Math.floor(filteredPlys.length / 2);
+        
+        return [
+        ...filteredPlys.slice(0, middleIndex),
+        mvpPl,
+        ...filteredPlys.slice(middleIndex)
+        ];
+  }else return plys;
+});
+
+function defaultTopImage(e){
+        e.target.src = '/players/placeholder_full_transp.png'
+    }
 
 onBeforeMount(async ()=>{
     await matchService.fetch()
@@ -120,5 +160,6 @@ onBeforeMount(async ()=>{
     .toimage{
         width: 1920px;
         height: 1080px;
+        background-image: url("/vestuario_blurred_1920x1080.jpg");
     }
 </style>
