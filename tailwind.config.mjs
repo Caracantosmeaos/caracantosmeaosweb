@@ -6,6 +6,12 @@ export default {
 	},
 	theme: {
 		extend: {
+			scale:{
+				'115': '1.15'
+			},
+			fontSize: {
+				'10xl': '12rem', // Puedes ajustar el valor según lo que necesites
+			},
 			colors: {
 				...colors,
 				'vtd-primary': {

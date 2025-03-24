@@ -3,16 +3,18 @@
         <div id="to_image" class="toimage flex w-full flex-initial overflow-hidden" v-if="!isLoading">
             <div class="w-7/12 flex-initial flex flex-col">
                 <p class="w-full text-9xl font-extrabold text-center" :class="resultColor">{{ reverseResult.get(match.result).toUpperCase() }}</p>
-                <div class="my-2 w-full flex-initial flex p-1 h-full flex-nowrap items-center place-content-evenly">
-                    <div v-for="p in sortedPlayers" class="text-3xl text-center">
-                        <div class="backdrop-blur-md bg-base-300/50 mx-6 rounded-xl">
+                <div class="mt-4 w-full flex-initial flex p-1 h-full flex-nowrap items-center justify-center place-content-evenly gap-0" :class="{'space-x-[-40px]': isAnyoneMvp}">
+                    <div v-for="(p, index) in sortedPlayers" class="text-3xl text-center flex flex-initial flex-col justify-center items-center place-content-center"
+                    >
+                        <div class="backdrop-blur-md bg-base-300/50 rounded-xl w-fit py-2 px-6">
                             <div class="flex w-full text-center self-centeralign-middle place-content-center">
                                 <svg  v-if="p.manOfTheMatch" xmlns="http://www.w3.org/2000/svg" class="mr-1 w-10 h-11 text-primary" width="24" height="24" fill="currentColor" viewBox="0 -960 960 960" ><path d="m363-310 117-71 117 71-31-133 104-90-137-11-53-126-53 126-137 11 104 90-31 133ZM480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-112 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/></svg>
                                 <p class="text-primary font-semibold text-center">{{ p.playername }}</p>
                             </div>
                             <p class="text-neutral-content">{{ p.rating }}</p>
                         </div>
-                        <img :src="'/players/' + p.playername + '_full_transp.png'" class="" alt="Player ingame photo" 
+                        <img :src="'/players/' + p.playername + '_full_transp.png'" class="flex-shrink-0 z-0" 
+                        :class="{'transform scale-115 mt-6 z-10': p.manOfTheMatch}" alt="Player ingame photo" 
                         @error="defaultTopImage"/>
                     </div>
                 </div>
@@ -20,7 +22,7 @@
             <div class="w-5/12 h-full min-h-full max-h-full flex flex-col flex-initial justify-stretch backdrop-blur-md bg-base-300/75 rounded-l-2xl overflow-hidden">
                 <div class="w-full grid grid-cols-12 grid-rows-1 content-center justify-center items-center bg-base-300 dark:bg-base-100">
                     <p class="col-span-9 text-6xl overflow-hidden truncate px-1">{{ match.localClub.name }}</p>
-                    <p class="col-span-3 bg-base-100 dark:bg-base-300 text-9xl font-extrabold text-center text-primary py-5">{{ match.localClub.matchStats.goals }}</p>
+                    <p class="col-span-3 bg-base-100 dark:bg-base-300 text-10xl leading-none font-extrabold text-center text-primary ">{{ match.localClub.matchStats.goals }}</p>
                 </div>
                 <div class="h-full w-full flex flex-col flex-initial">
                     <div class="w-full h-full flex overflow-hidden flex-initial">
@@ -69,7 +71,7 @@
                 </div>
                 <div class="w-full grid grid-cols-12 grid-rows-1 content-center justify-center items-center bg-base-300 dark:bg-base-100 place-self-end">
                     <p class="col-span-9 text-6xl overflow-hidden truncate px-1">{{ match.awayClub.name }}</p>
-                    <p class="col-span-3 bg-base-100 dark:bg-base-300 text-9xl font-extrabold text-center text-primary py-5">{{ match.awayClub.matchStats.goals }}</p>
+                    <p class="col-span-3 bg-base-100 dark:bg-base-300 text-10xl leading-none font-extrabold text-center text-primary">{{ match.awayClub.matchStats.goals }}</p>
                 </div>
             </div>
         </div>
@@ -85,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, computed } from 'vue';
+import { ref, type Ref, computed, onBeforeMount } from 'vue';
 import ClubMatchService from '@services/ClubMatchService';
 import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
 
@@ -111,6 +113,14 @@ const resultColor = computed((local?)=>{
     }
     return resp
 })
+
+const isAnyoneMvp = computed(()=>{
+    return sortedPlayers.value.find(i => i.manOfTheMatch)
+})
+
+onBeforeMount(async ()=>{
+     await matchService.fetch()
+ })
 
 const sortedPlayers = computed(() => {
     const plys = match.value.localTeam ? match.value.localClub.players : match.value.awayClub.players
