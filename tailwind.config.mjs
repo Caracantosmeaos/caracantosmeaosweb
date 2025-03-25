@@ -10,7 +10,13 @@ export default {
 				'115': '1.15'
 			},
 			fontSize: {
-				'10xl': '12rem', // Puedes ajustar el valor según lo que necesites
+				'10xl': '12rem',
+				'11xl': '13rem',
+				'12xl': '14rem',
+				'13xl': '15rem',
+				'14xl': '16rem',
+				'15xl': '18rem',
+				'16xl': '20rem',
 			},
 			colors: {
 				...colors,

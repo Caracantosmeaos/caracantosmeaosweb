@@ -13,8 +13,8 @@
                             </div>
                             <p class="text-neutral-content">{{ p.rating }}</p>
                         </div>
-                        <img :src="'/players/' + p.playername + '_full_transp.png'" class="flex-shrink-0 z-0" 
-                        :class="{'transform scale-115 mt-6 z-10': p.manOfTheMatch}" alt="Player ingame photo" 
+                        <img :src="'/players/' + p.playername + '_full_transp.png'" class="flex-shrink-0 z-0 drop-shadow-xl" 
+                        :class="{'transform scale-115 mt-6 z-10 drop-shadow-2xl': p.manOfTheMatch}" alt="Player ingame photo" 
                         @error="defaultTopImage"/>
                     </div>
                 </div>
