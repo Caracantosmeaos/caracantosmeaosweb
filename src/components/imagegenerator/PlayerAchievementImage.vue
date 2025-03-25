@@ -2,14 +2,14 @@
     <div v-if="status==200">
         <div id="to_image" class="relative toimage flex flex-col w-full flex-initial overflow-hidden" v-if="!isLoading">
             <div class="flex flex-col w-2/3">
-                <p class="px-2 font-extrabold leading-none drop-shadow-md" 
+                <p class="px-2 text-primary font-extrabold leading-none drop-shadow-md" 
                 :class="{
                 'text-16xl': achievement.reached <= 999,
                 'text-14xl': achievement.reached > 999 && achievement.reached <= 9999,
                 'text-12xl': achievement.reached > 9999
                 }
                 ">{{ formatNumber(achievement.reached) }}</p>
-                <p class="px-2 text-primary font-bold text-9xl drop-shadow-2xl z-10">{{ AchievementType[achievement.type].toLocaleUpperCase() }}</p>
+                <p class="px-2 text-gray-300 font-bold text-9xl drop-shadow-2xl z-10">{{ AchievementType[achievement.type].toLocaleUpperCase() }}</p>
             </div>
             <img :src="'/players/' + player.playerName + '_full_transp.png'" class="absolute bottom-0 right-0 drop-shadow-2xl"  alt="Player ingame photo" @error="defaultFullImage"/>
             <div class="flex flex-col w-2/3 h-full justify-end mb-10">
@@ -50,7 +50,7 @@ enum AchievementType {
     goals="goles",
     assists="asistencias",
     redcards="tarjetas rojas",
-    passes="pases realizados",
+    passes="pases",
     motm="mejor del partido"
 }
 
