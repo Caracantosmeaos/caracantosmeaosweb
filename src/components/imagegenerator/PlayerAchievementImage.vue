@@ -9,7 +9,9 @@
                 'text-12xl': achievement.reached > 9999
                 }
                 ">{{ formatNumber(achievement.reached) }}</p>
-                <p class="px-2 text-gray-300 font-bold text-9xl drop-shadow-2xl z-10">{{ AchievementType[achievement.type].toLocaleUpperCase() }}</p>
+                <p class="px-2 text-gray-300 font-bold drop-shadow-2xl z-10" 
+                :class="{'text-9xl': achievement.type!='assists','text8-5xl': achievement.type==='assists' }">
+                {{ AchievementType[achievement.type].toLocaleUpperCase() }}</p>
             </div>
             <img :src="'/players/' + player.playerName + '_full_transp.png'" class="absolute bottom-0 right-0 drop-shadow-2xl"  alt="Player ingame photo" @error="defaultFullImage"/>
             <div class="flex flex-col w-2/3 h-full justify-end mb-10">
@@ -86,5 +88,10 @@ function defaultFullImage(e){
         width: 960px;
         height: 1080px;
         background-image: url("/vestuario_blurred_1920x1080.jpg");
+    }
+
+    .text8-5xl {
+        font-size: 6.6rem;
+        line-height: 1;
     }
 </style>
