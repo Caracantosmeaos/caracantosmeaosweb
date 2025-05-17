@@ -56,9 +56,9 @@
               <div data-atropos-offset="2" class="absolute inset-x-0 h-full flex flex-col justify-between pb-16 pt-4">
                 <!-- Portero -->
                 <div class="absolute left-1/2 top-0 transform -translate-x-1/2">
-                  <div class="flex-col bg-base-300 p-1 rounded-xl h-fit m-10 mt-2 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer shadow-lg" 
+                  <div class="flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75 p-1 rounded-xl h-fit m-10 mt-2 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer shadow-lg" 
                   v-for="pl in playersByPos('goalkeeper')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                     <img :src="topImage(pl.playername)" class="drop-shadow-lg select-none pointer-events-none" alt="Player ingame top image" @error="defaultTopImage"/>
                     <span class="text-sm" :class="{
@@ -67,9 +67,9 @@
                       {{ pl.playername }}
                     </span>
                   </div>
-                  <div class=" flex-col bg-base-300 p-1 rounded-xl h-fit mt-2 items-center justify-center align-middle overflow-hidden md:hidden w-fit cursor-pointer shadow-lg" 
+                  <div class=" flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75  p-1 rounded-xl h-fit mt-2 items-center justify-center align-middle overflow-hidden md:hidden w-fit cursor-pointer shadow-lg" 
                   v-for="pl in playersByPos('goalkeeper')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                     <span class="text-xs text-center" :class="{
                       'text-primary-content shadow-lg': props.selectedplayer == players.indexOf(pl)
@@ -79,9 +79,9 @@
                 
                 <!-- Línea de defensa -->
                 <div class="absolute left-0 right-0 top-[16%] flex justify-evenly px-6 ">
-                  <div class="flex-col bg-base-300 p-1 rounded-xl h-fit m-10 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer shadow-lg" 
+                  <div class="flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75 p-1 rounded-xl h-fit m-10 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer shadow-lg" 
                   v-for="pl in playersByPos('midfielder')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                     <img :src="topImage(pl.playername)" class="drop-shadow-lg select-none pointer-events-none" alt="Player ingame top image" @error="defaultTopImage"/>
                     <span class="text-sm" :class="{
@@ -90,9 +90,9 @@
                       {{ pl.playername }}
                     </span>
                   </div>
-                  <div class=" flex-col bg-base-300 p-1 rounded-xl h-fit mt-4 items-center justify-center align-middle overflow-x-hidden md:hidden w-fit cursor-pointer shadow-lg" 
+                  <div class=" flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75 p-1 rounded-xl h-fit mt-4 items-center justify-center align-middle overflow-x-hidden md:hidden w-fit cursor-pointer shadow-lg" 
                   v-for="pl in playersByPos('midfielder')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                     <span class="text-xs text-center overflow-x-clip" :class="{
                       'text-primary-content shadow-lg': props.selectedplayer == players.indexOf(pl)
@@ -102,9 +102,9 @@
                   
                   <!-- Línea de mediocampo -->
                 <div class="absolute left-0 right-0 top-[43%] flex justify-evenly px-8">
-                    <div class="flex-col bg-base-300 p-1 rounded-xl h-fit m-10 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer shadow-lg" 
+                    <div class="flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75 p-1 rounded-xl h-fit m-10 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer shadow-lg" 
                     v-for="pl in playersByPos('midfielder')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                       <img :src="topImage(pl.playername)" class=" drop-shadow-lg select-none pointer-events-none" alt="Player ingame top image" @error="defaultTopImage"/>
                       <span class="text-sm" :class="{
@@ -113,9 +113,9 @@
                         {{ pl.playername }}
                       </span>
                     </div>
-                    <div class=" flex-col bg-base-300 p-1 rounded-xl h-fit mt-4 items-center justify-center align-middle overflow-x-hidden md:hidden w-fit cursor-pointer" 
+                    <div class=" flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75 p-1 rounded-xl h-fit mt-4 items-center justify-center align-middle overflow-x-hidden md:hidden w-fit cursor-pointer" 
                     v-for="pl in playersByPos('midfielder')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                       <span class="text-xs text-center overflow-x-clip" :class="{
                       'text-primary-content shadow-lg': props.selectedplayer == players.indexOf(pl)
@@ -125,9 +125,9 @@
                 
                 <!-- Línea de delantera -->
                 <div class="absolute left-0 right-0 top-[71%] flex justify-evenly px-10">
-                  <div class="flex-col bg-base-300 p-1 rounded-xl h-fit m-10 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer" 
+                  <div class="flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75 p-1 rounded-xl h-fit m-10 items-center justify-center align-middle w-20 overflow-hidden hidden md:flex cursor-pointer" 
                   v-for="pl in playersByPos('forward')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                     <img :src="topImage(pl.playername)" class="drop-shadow-lg select-none pointer-events-none" alt="Player ingame top image" @error="defaultTopImage"/>
                     <span class="text-sm" :class="{
@@ -136,9 +136,9 @@
                         {{ pl.playername }}
                     </span>
                   </div>
-                  <div class=" flex-col bg-base-300 p-1 rounded-xl h-fit mt-4 items-center justify-center align-middle overflow-x-hidden md:hidden w-fit cursor-pointer" 
+                  <div class=" flex-col bg-base-300/55 backdrop-blur-sm hover:bg-base-300/75 p-1 rounded-xl h-fit mt-4 items-center justify-center align-middle overflow-x-hidden md:hidden w-fit cursor-pointer" 
                   v-for="pl in playersByPos('forward')" @click="selectPlayer(players.indexOf(pl))" :class="{
-                    'bg-primary': props.selectedplayer == players.indexOf(pl)
+                    'bg-primary hover:bg-primary': props.selectedplayer == players.indexOf(pl)
                   }">
                     <span class="text-xs text-center overflow-x-clip" :class="{
                       'text-primary-content shadow-lg': props.selectedplayer == players.indexOf(pl)
