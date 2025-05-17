@@ -1,6 +1,8 @@
 ---
 export const prerender = false;
 import Layout from "@/layouts/Layout.astro"
+import FootbalField from "@/components/match/detail/FootbalField.vue";
+import MatchDetail from "@/components/match/detail/MatchDetail.vue";
 
 const {matchid} = Astro.params
 //let finalMatchID:string = "" 
@@ -17,10 +19,9 @@ if(matchid==undefined){
 	<meta slot="metadata" name="twitter:url" content=`https://www.caracantosmeaos.club/partido/${matchid}`/>
 	<meta slot="metadata" name="twitter:image" content="https://www.caracantosmeaos.club/escudo_banner_fondo.jpg"/>
 
-    <header>
-
-    </header>
-    <section>
-		
-    </section>
+	<section >
+		<container class="flex p-6 lg:p-16 justify-center items-center">           
+			<MatchDetail client:load matchId={Number(matchid)}/>
+		</container>
+	</section>
 </Layout>
