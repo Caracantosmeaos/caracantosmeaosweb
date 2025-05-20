@@ -27,7 +27,7 @@ const forceBothTypes = !matchTypeLeague && !matchTypePlayoff
 	<section >
 		<container class="flex p-6 lg:p-16 justify-center items-center">
             <MatchesContainer matchId={matchId.toString()} dateFrom={dateFrom.toString()} dateTo={dateTo.toString()} 
-			matchTypeLeague={!forceBothTypes ? matchTypeLeague : true} matchTypePlayoff={!forceBothTypes ? matchTypePlayoff : true} client:visible/>
+			matchTypeLeague={!forceBothTypes ? matchTypeLeague : true} matchTypePlayoff={!forceBothTypes ? matchTypePlayoff : true} client:only/>
 		</container>
 	</section>
 
