@@ -25,9 +25,6 @@
                 </div>
             </div>
         </header>
-        <div v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" class="mt-3 flex flex-row-reverse justify-end flex-wrap">
-
-        </div>
         <div class="w-full flex justify-center lg:justify-normal">
             <Paginator v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" 
             :itemsCount="finalMatchList.length" :itemsPerPage="paginatorItemsPerPage" :currentPage="paginatorPage" :maxButtons="5" @pagechange="onPageChange"
