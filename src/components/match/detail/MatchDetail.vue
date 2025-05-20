@@ -49,7 +49,7 @@
             <div class="overflow-x-auto w-full customscroll py-4">
             <div class="flex min-w-max gap-4 py-2">
                 <div class="flex-grow"></div>
-                <div class="flex-shrink-0 bg-base-200 dark:bg-base-100 rounded-lg shadow-md w-56 flex p-2 align-middle cursor-pointer hover:shadow-xl" v-for="(pl, index) in players"
+                <div class="flex-shrink-0 bg-base-300 dark:bg-base-100 rounded-lg shadow-md w-56 flex p-2 align-middle cursor-pointer hover:shadow-xl" v-for="(pl, index) in players"
                 :class="{
                     'bg-primary dark:bg-primary hover:bg-primary text-primary-content': selectedPlayer==index
                   }" @click="selectedPlayer=index">
@@ -98,9 +98,34 @@
             </div>
             </div>
 
-
-            <FootbalField :players="players" :selectedplayer="selectedPlayer" @selectplayer="selectedPlayer = $event" class="mt-4"></FootbalField>
-
+            <div class="w-full flex flex-col md:flex-row mt-4 lg:mt-1 gap-4 h-fit">
+                <div class="flex-1 flex align-middle bg-base-200 rounded-lg shadow-md p-4 overflow-hidden">
+                    <img :src="playerImage(getSelectedPlayer().playername)" class="hidden md:flex drop-shadow-xl select-none pointer-events-none max-w-[30%] xl:max-w-[20%] h-auto object-contain mx-2" alt="Player ingame top image" style="aspect-ratio: 40/97;" @error="defaultPlayerImage"/>
+                    <div class="flex flex-col w-full">
+                        <div class="inline-flex gap-2 self-center">
+                            <svg  v-if="getSelectedPlayer().manOfTheMatch" xmlns="http://www.w3.org/2000/svg" class="mr-1 w-8 h-8  px-1 self-center font-semibold text-primary" width="24" height="24" fill="currentColor" viewBox="0 -960 960 960" ><path d="m363-310 117-71 117 71-31-133 104-90-137-11-53-126-53 126-137 11 104 90-31 133ZM480-28 346-160H160v-186L28-480l132-134v-186h186l134-132 134 132h186v186l132 134-132 134v186H614L480-28Zm0-112 100-100h140v-140l100-100-100-100v-140H580L480-820 380-720H240v140L140-480l100 100v140h140l100 100Zm0-340Z"/></svg>
+                            <p class="text-primary font-semibold text-lg md:text-xl lg:text-2xl">{{ getSelectedPlayer().playername }}</p>
+                            <p class="font-medium text-lg md:text-xl lg:text-2xl">({{ getSelectedPlayer().rating }})</p>
+                            <div class="grid h-6 w-4 place-items-center bg-error rounded-sm self-center" v-if="getSelectedPlayer().redCards>0"></div>
+                        </div>
+                        <p class="self-center text-lg font-light">{{ Position[getSelectedPlayer().position] }}</p>
+                        <div class="divider px-8 md:px-16"></div>
+                        <div class="relative overflow-hidden py-1 px-4 w-full bg-base-100 rounded-lg">
+                            <img :src="playerImage(getSelectedPlayer().playername)" class="absolute block md:hidden top-0 left-1/2 -translate-x-1/2 opacity-30 h-full object-contain pointer-events-none select-none" alt="Player ingame top image" @error="defaultPlayerImage"/>
+                            <div class="w-full flex my-4 text-lg text-clip text-pretty justify-between" v-for="stat in orderedPlayerStats(getSelectedPlayer())">
+                                <p class="text-start font-medium">{{ stat.name }}</p>
+                                <p class="text-right text-primary"><count-up :end-val="Number.isNaN(stat.stat)?0:stat.stat" class="inline" :decimalPlaces="stat.decimals"></count-up><span v-if="stat.percent">%</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center md:w-auto md:basis-5/12 xl:basis-4/12 md:flex-shrink-0">
+                    <FootbalField :players="players" 
+                    :selectedplayer="selectedPlayer" 
+                    @selectplayer="selectedPlayer = $event" 
+                    class="w-full max-w-md aspect-[4/3]"></FootbalField>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -113,12 +138,12 @@
 </template>
 <script setup lang="ts">
     import { computed, onBeforeMount, ref, type Ref } from 'vue';
-    import ClubMember from '@/model/ClubMemberEntity';
     import ClubMatchService from '@services/ClubMatchService';
     import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
     import FootbalField from './FootbalField.vue';   
-    import type MatchPlayerEntity from '@/model/match/MatchPlayerEntity';
-    
+    import  MatchPlayerEntity, {Position} from '@/model/match/MatchPlayerEntity';
+    import CountUp from 'vue-countup-v3'
+
     const props = defineProps<{
         matchId: number
     }>()
@@ -136,17 +161,19 @@
     reverseResult.set(modeValue, pos);
     });
 
-    function trimDecimal(decimal:number, trim:number){
-        return decimal.toFixed(trim)
+
+    function getSelectedPlayer(){
+        return players.value.filter(el => (players.value.indexOf(el)==selectedPlayer.value))[0]
     }
 
-    /*const topImage = computed(() => {
-        return `/players/${props.player.playerName}_top_transp.png`
-    })*/
-
-    function defaultTopImage(e){
-        e.target.src = '/players/placeholder_top_transp.png'
+    function playerImage(playername){
+      return `/players/${playername}_full_transp.png`
     }
+
+    function defaultPlayerImage(e){
+        e.target.src = '/players/placeholder_full_transp.png'
+    }
+
 
     const resultColor = computed((local?)=>{
         let resp = {
@@ -155,6 +182,65 @@
         }
         return resp
     })
+
+    function orderedPlayerStats(player: MatchPlayerEntity){
+          return [
+            {
+                name: "Goles",
+                stat: player.goals,
+                percent: false,
+                decimals: 0
+            },
+            {
+                name: "Tiros",
+                stat: player.shots,
+                percent: false,
+                decimals: 0
+            },
+            {
+                name: "Tiros convertidos (%)",
+                stat: player.shotAccuracyPercent,
+                percent: true,
+                decimals: 1
+            },
+            {
+                name: "Pases intentados",
+                stat: player.passesMade,
+                percent: false,
+                decimals: 0
+            },
+            {
+                name: "Pases acertados",
+                stat: player.passesSuccess,
+                percent: false,
+                decimals: 0
+            },
+            {
+                name: "Acierto pases (%)",
+                stat: player.passSuccessRate,
+                percent: true,
+                decimals: 1
+            },
+            {
+                name: "Tacklees intentados",
+                stat: player.tacklesMade,
+                percent: false,
+                decimals: 0
+            },
+            {
+                name: "Tacklees acertados",
+                stat: player.tacklesSuccess,
+                percent: false,
+                decimals: 0
+            },
+            {
+                name: "Acierto tacklees (%)",
+                stat: player.tackleSuccessRate,
+                percent: true,
+                decimals: 1
+            }
+        ]
+    }
 
     /**OWN COPYPASTE FROM MATCHFIELD :D */
     function getRedCardPlayers(localclub:boolean){

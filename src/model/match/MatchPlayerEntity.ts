@@ -4,7 +4,7 @@ export default class MatchPlayerEntity implements IMatchPlayer {
     playername: string
     rating: number
     redCards: number
-    position: Position
+    position: "midfielder" | "forward" | "defender" | "goalkeeper"
     assists: number
     goals: number
     shots: number
@@ -29,12 +29,13 @@ export default class MatchPlayerEntity implements IMatchPlayer {
         }
     }
 }
-enum Position {
-    Centrocampista = "midfielder",
-    Delantero = "forward",
-    Defensa = "defender",
-    Portero = "goalkeeper",
+export enum Position {
+    midfielder = "Centrocampista",
+    forward="Delantero",
+    defender="Defensa",
+    goalkeeper="Portero",
 }
+
 /*type Position = "midfielder" | "forward" | "defender" | "goalkeeper"
 let Position = {
     Centrocampista: "midfielder",
