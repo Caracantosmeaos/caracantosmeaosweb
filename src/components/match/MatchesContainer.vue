@@ -1,16 +1,42 @@
 <template>
-    <div role="container" class="w-full lg:px-32">
+    <div role="container" class="w-full lg:px-10 xl:px-16 overflow-hidden">
         <header role="container" class="w-full py-4 px-6 h-full rounded-lg shadow-xl dark:shadow dark:bg-base-200">
             <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-10 justify-around items-center h-full">
-                <div class="form-control flex flex-col h-full justify-between">
-                    <span class="text-center font-semibold">Filtrar por ID</span>
-                    <input type="number" placeholder="ID Partido" class="input input-bordered w-full" v-model="IDFilter"/>
+                <div class="flex flex-col h-full justify-between gap-1">
+                    <div class="form-control flex flex-col h-full justify-between">
+                        <span class="text-center font-semibold">Filtrar por ID</span>
+                        <input type="number" placeholder="ID Partido" class="input input-bordered w-full" v-model="IDFilter"/>
+                    </div>
+                    <div class="form-control flex flex-col h-full justify-between">
+                        <div class="w-full flex flex-row p-2 font-semibold">
+                            <span class="self-start w-full">Jugadores mínimos</span>
+                            <span class="self-end text-end">{{ minPlayersFilter }}</span>
+                        </div>
+                        <input v-model="minPlayersFilter" type="range" min="2" :max="members.length"  class="range range-sm" v-if="memberStatus==200 && !isMembersLoading" />
+                    </div>
                 </div>
-                <div class="flex flex-col h-full justify-between">
+                <div class="flex flex-col h-full justify-start gap-1">
                     <span class="text-center font-semibold">Filtrar por fechas</span>
                     <VueTailwindDatepicker i18n="es" v-model="dateFilter" class="w-full"
                     as-single use-range :formatter="dateFormatter" :options="datePickerOptions" :shortcuts="false" @keypress.stop.prevent
                     @keyup.stop.prevent @keydown.stop.prevent></VueTailwindDatepicker>
+                    <div class="form-control flex flex-col h-full justify-between">
+                        <span class="text-center font-semibold">Filtrar por jugadores</span>
+                        <div class="dropdown w-full justify-center self-center mt-1" v-if="memberStatus==200 && !isMembersLoading">
+                            <div tabindex="0" role="button" class="btn btn-block btn-outline" v-if="filteredPlayerNames.length>0">{{ filteredPlayerNamesPretty }}</div>
+                            <div tabindex="0" role="button" class="btn btn-block btn-outline" v-else>Desplegar lista de jugadores</div>
+                            <ul tabindex="0" class="dropdown-content menu bg-base-200 dark:bg-base-300 rounded-md z-20 w-full p-2 shadow-sm dark:shadow-md">
+                                <li v-for="pl, index in members">
+                                    <a class="flex flex-row w-full justify-between">
+                                        <label class="label cursor-pointer h-full flex flex-row w-full justify-between">
+                                            <span class="label-text">{{ pl.playerName }}</span> 
+                                            <input type="checkbox" class="checkbox checkbox-sm" v-model="playersFilter[pl.playerName]" /> 
+                                        </label>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-control flex flex-col h-full justify-between ">
                         <span class="text-center font-semibold">Filtrar por tipo de partido</span>
@@ -25,10 +51,11 @@
                 </div>
             </div>
         </header>
-        <div class="w-full flex justify-center lg:justify-normal">
-            <Paginator v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" 
+        <div class="w-full flex justify-center flex-col lg:flex-row lg:justify-between">
+            <Paginator v-if="!hasErrorComputed && !isLoading && finalMatchList.length>0" class="self-center" 
             :itemsCount="finalMatchList.length" :itemsPerPage="paginatorItemsPerPage" :currentPage="paginatorPage" :maxButtons="5" @pagechange="onPageChange"
             />
+            <div class="self-center m-1">{{ finalMatchList.length }} resultados</div>
         </div>
         <div v-if="!hasErrorComputed" role="contentinfo" class="mt-3 w-full p-3 lg:p-4 flex rounded-lg shadow-lg dark:shadow dark:bg-base-200">
             <svg v-if="isLoading" class="footballloader" viewBox="0 0 866 866" xmlns="http://www.w3.org/2000/svg">
@@ -78,19 +105,30 @@
     import ClubMatchesService from '@services/ClubMatchesService';
     import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
     import MatchField from './MatchField.vue';
+    import ClubMembersService from '@services/ClubMembersService';
+    import ClubMember from '@/model/ClubMemberEntity'
     import Paginator from '@components/Paginator.vue';
     import VueTailwindDatepicker from "vue-tailwind-datepicker";
+    import type MatchPlayerEntity from '@/model/match/MatchPlayerEntity';
 
     const matchService = new ClubMatchesService()
     const matches:Ref<ClubMatchEntity[]> = matchService.getData()
     const isLoading = matchService.isloading
     const status = matchService.getStatus()
 
+    const memberService = new ClubMembersService()
+    const members:Ref<ClubMember[]> = memberService.getData()
+    const isMembersLoading = memberService.isloading
+    const memberStatus = matchService.getStatus()
+
+
     const paginatorPage = ref(1)
     const paginatorItemsPerPage = 5
 
     onBeforeMount(async ()=>{
+        await memberService.fetch()
         await matchService.fetch()
+        members.value.forEach(e => {playersFilter.value[e.playerName]=false})
     })
 
     const props = defineProps<{
@@ -136,10 +174,37 @@
         cancel: "Cancelar",
     },
     });
+    const minPlayersFilter = ref(2)
+
+    const playersFilter = ref({})
+
+    const filteredPlayerNames = computed(()=>{
+        var plnames = []
+        //console.log(Object.entries(playersFilter.value))
+        Object.entries(playersFilter.value).forEach(([plname, value]) => {
+            if(value)plnames.push(plname)
+        });
+        return plnames
+    })
+    const filteredPlayerNamesPretty = computed(()=>{
+        var str = ""
+        for(var i in filteredPlayerNames.value){
+            str+=filteredPlayerNames.value[i]
+            if(filteredPlayerNames.value.length!=(Number(i)+1))str+=", "
+        }
+        return str
+    })
+    function playerNames(players: MatchPlayerEntity[]){
+        var plnames = []
+        players.forEach(e =>{
+            plnames.push(e.playername)
+        })
+        return plnames
+    }
     
     //watch for filter changes and reset pagination
     watch(
-        [IDFilter,dateFilter,matchTypeFilter],
+        [IDFilter,dateFilter,matchTypeFilter,minPlayersFilter,playersFilter],
         () =>{
             paginatorPage.value = 1
         }
@@ -150,6 +215,8 @@
         try{
             var filteredList = list.filter((el) => IDFilter.value.toString().includes(el.matchId.toString()) || el.matchId.toString().startsWith(IDFilter.value) || el.matchId===Number(IDFilter.value) );
             filteredList = filteredList.filter( (el) => matchTypeFilter.value.includes(el.matchType))
+            filteredList = filteredList.filter(el => (el.localTeam ? filteredPlayerNames.value.every(fp =>playerNames(el.localClub.players).includes(fp)) : filteredPlayerNames.value.every(fp =>playerNames(el.awayClub.players).includes(fp))) )
+            filteredList = filteredList.filter( (el) => el.localTeam ? el.localClub.players.length>=minPlayersFilter.value : el.awayClub.players.length>=minPlayersFilter.value )
             filteredList = dateFilter.value.startDate!=="" && dateFilter.value.endDate!=="" 
             ? filteredList.filter( (el) => (new Date(el.timestamp*1000).getTime() >= toDate(dateFilter.value.startDate).getTime() && new Date(el.timestamp*1000).getTime()<=toDate(dateFilter.value.endDate, true).getTime()) ) : filteredList
             return filteredList

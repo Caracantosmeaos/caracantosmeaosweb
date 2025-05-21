@@ -25,7 +25,7 @@ const forceBothTypes = !matchTypeLeague && !matchTypePlayoff
 		<h2 class="font-bold text-2xl text-center">Aquí se muestra el historial de nuestros últimos partidos</h2>
 	</header>
 	<section >
-		<container class="flex p-6 lg:p-16 justify-center items-center">
+		<container class="flex p-6 lg:p-10 justify-center items-center">
             <MatchesContainer matchId={matchId.toString()} dateFrom={dateFrom.toString()} dateTo={dateTo.toString()} 
 			matchTypeLeague={!forceBothTypes ? matchTypeLeague : true} matchTypePlayoff={!forceBothTypes ? matchTypePlayoff : true} client:only/>
 		</container>
