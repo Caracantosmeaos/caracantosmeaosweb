@@ -269,6 +269,12 @@
                 decimals: 1
             },
             {
+                name: "Asistencias",
+                stat: player.assists,
+                percent: false,
+                decimals: 0
+            },
+            {
                 name: "Tacklees intentados",
                 stat: player.tacklesMade,
                 percent: false,
