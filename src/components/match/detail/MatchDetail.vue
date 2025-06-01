@@ -54,6 +54,11 @@
                     <p class="text-end font-extrabold text-4xl  ml-4">{{ match.awayClub.matchStats.goals }}</p>
                 </div>
             </div>
+            <div class="py-2 px-4 flex justify-between gap-x-8 md:gap-x-12">
+                <div v-if="match.winnerByDnf" class="badge badge-error badge-lg">Desconexión</div>
+                <div class="badge badge-primary badge-lg">{{ matchType[match.matchType] }}</div>
+                <div v-if="match.matchType=='playoff'&&match.winnerByPen" class="badge badge-neutral badge-lg">Penaltis</div>
+            </div>
 
             <div class="overflow-x-auto w-full customscroll py-4">
             <div class="flex min-w-max gap-4 py-2">
@@ -199,6 +204,10 @@
     reverseResult.set(modeValue, pos);
     });
 
+    const matchType = {
+        "league": "Liga",
+        "playoff": "Playoff"
+    }
 
     function getSelectedPlayer(){
         return players.value.filter(el => (players.value.indexOf(el)==selectedPlayer.value))[0]

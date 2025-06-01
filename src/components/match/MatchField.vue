@@ -230,7 +230,7 @@
                 </div>
             </article>
             <article>
-                <button class="btn btn-sm btn-primary mt-4" @click.prevent="toMatchDetail()">Ver más</button>
+                <a :href=detailurl><button class="btn btn-sm btn-primary mt-4">Ver más</button></a>
             </article>
             <article>
                 <span class="font-thin text-xs text-neutral">ID: #{{ match.matchId }}</span>
@@ -247,6 +247,8 @@
         key
     }>()
 
+
+    const detailurl = `/partido/${props.match.matchId}`
 
     function toMatchDetail() {
         window.location.href = `/partido/${props.match.matchId}`;
