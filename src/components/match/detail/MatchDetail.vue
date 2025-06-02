@@ -59,6 +59,10 @@
                 <div class="badge badge-primary badge-lg">{{ matchType[match.matchType] }}</div>
                 <div v-if="match.matchType=='playoff'&&match.winnerByPen" class="badge badge-neutral badge-lg">Penaltis</div>
             </div>
+            <div class="flex my-3 items-center justify-center text-center text-xl gap-x-1">
+                <p class="font-semibold">Rating del equipo: </p>
+                <p :class=ratingColor class="font-light text-2xl bg-primary-content p-1 rounded-lg">{{ teamAverageRating.toFixed(1) }}</p>
+            </div>
 
             <div class="overflow-x-auto w-full customscroll py-4">
             <div class="flex min-w-max gap-4 py-2">
@@ -123,8 +127,11 @@
                             <div class="grid h-6 w-4 place-items-center bg-error rounded-sm self-center" v-if="getSelectedPlayer().redCards>0"></div>
                         </div>
                         <p class="self-center text-lg font-light">{{ Position[getSelectedPlayer().position] }}</p>
-                        <div class="divider px-8 md:px-16"></div>
-                        <div class="relative overflow-hidden py-1 px-4 w-full bg-base-100 rounded-lg">
+                        <div class="divider px-8 md:px-16 mb-1"></div>
+                        <div class="relative overflow-hidden py-1 px-4 w-full rounded-lg my-1 text-center justify-center text-sm font-light">
+                            <i>{{ getPlayerSummaryText(getSelectedPlayer()) }}</i>
+                        </div>
+                        <div class="relative overflow-hidden py-1 px-4 w-full bg-base-100 rounded-lg mt-1">
                             <img :src="playerImage(getSelectedPlayer().playername)" class="absolute block md:hidden top-0 left-1/2 -translate-x-1/2 opacity-30 h-full object-contain pointer-events-none select-none" alt="Player ingame top image" @error="defaultPlayerImage"/>
                             <div class="w-full flex my-4 text-lg text-clip text-pretty justify-between" v-for="stat in orderedPlayerStats(getSelectedPlayer())">
                                 <p class="text-start font-medium">{{ stat.name }}</p>
@@ -222,12 +229,47 @@
     }
 
 
+    const teamAverageRating = computed(()=>{
+        return (players.value.reduce((sum, p) => sum + p.rating, 0) / players.value.length);
+    })
+
+    function getPlayerSummaryText(player) {
+        if (player.redCards>0) return "❝ Se fue a la ducha antes de tiempo ❞";
+        if (player.goals >= 4) return "❝ No tiene cartas pero... Poker ❞";
+        if (player.goals >= 3) return "❝ Se llevó el balón a casa ❞";
+        if (player.goals >= 2) return "❝ Ha hecho un doblete ❞";
+        if (player.assists >=4) return "❝ En modo Kevin De Bruyne ❞"
+        if (player.assists >=3) return "❝ Hat trick de asistencias ❞"
+        if (player.assists >=2) return "❝ Doblete de asistencias ❞"
+        if (player.passesMade >= 33) return "❝ Se ha creido Xavi Hernández ❞"
+        if (player.passSuccessRate >= 99) return "❝ No ha fallado ni un pase ❞"
+        if (player.passSuccessRate >= 80) return "❝ Más preciso que un reloj suizo ❞"
+        if (player.rating >= 9.9) return "❝ Partido perfecto ❞";
+        if (player.passSuccessRate <= 20) return "❝ No ha dado ni 2 pases seguidos ❞"
+        if (player.shotAccuracyPercent <= 20) return "❝ Chutó hasta desde su casa... para las stats ❞";
+        if (player.rating >= 8.5) return "❝ Clase magistral, fútbol champagne ❞";
+        if (player.tackleSuccessRate <= 20) return "❝ Pegó como un leñador, sin apuntar ❞";
+        if (player.rating <= 4) return "❝ Partido para olvidar... ❞";
+
+        return "❝ Buen partido, sólido ❞";
+    }
+
     const resultColor = computed((local?)=>{
         let resp = {
             'text-error': match.value.result=="loose",
             'text-success': match.value.result=="win"
         }
         return resp
+    })
+
+    const ratingColor = computed(()=>{
+        return {
+            'text-red-500': teamAverageRating.value<5,
+            'text-green-700': teamAverageRating.value>=9.9,
+            'text-green-500': teamAverageRating.value>=8.5,
+            'text-lime-500': teamAverageRating.value>=7.5,
+            'text-lime-300': teamAverageRating.value>=6
+        }
     })
 
     function orderedPlayerStats(player: MatchPlayerEntity){
