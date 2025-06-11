@@ -162,7 +162,6 @@
         <div class="flex gap-4 py-4 mt-2">
             <div class="skeleton dark:bg-base-100 w-56 h-16 skeletondark"></div>
             <div class="skeleton dark:bg-base-100 w-56 h-16 skeletondark"></div>
-            <div class="skeleton dark:bg-base-100 w-56 h-16 skeletondark"></div>
         </div>
         <div class="w-full flex flex-col md:flex-row mt-4 lg:mt-1 gap-4 h-fit">
             <div class="flex-1 flex align-middle bg-base-200 rounded-lg shadow-md p-4 overflow-hidden">

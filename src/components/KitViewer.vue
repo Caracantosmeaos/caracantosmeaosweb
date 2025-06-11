@@ -16,6 +16,8 @@ let controls: OrbitControls | null = null;
 let boxSize
 let distance
 
+const loaded = ref(false)
+
 const props = defineProps({
   kit: String
 });
@@ -96,13 +98,16 @@ function init() {
         controls.autoRotate = true;
         controls.autoRotateSpeed = 1.5;
 
-        controls.screenSpacePanning = false;
+        controls.enablePan = false
 
         controls.maxDistance = boxSize.y * 1.2
         controls.minDistance = boxSize.y * 0.5
 
         controls.minPolarAngle = Math.atan2(boxSize.y * 0.8, boxSize.z)
         controls.maxPolarAngle = Math.atan2(boxSize.y * 5, boxSize.z)
+
+        loaded.value = true
+
 
     }, undefined, (error) => {
         console.error('Error loading model:', error);
@@ -111,6 +116,7 @@ function init() {
     animate()
 
     window.addEventListener('resize', onResize);
+
 }
 
 function onResize() {
@@ -131,6 +137,7 @@ function dispose() {
   camera = null;
   controls = null;
   window.removeEventListener('resize', onResize);
+  loaded.value = false
 }
 
 let observer: IntersectionObserver | null = null;
@@ -162,5 +169,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="containerRef" style="width: 100%; height: 500px;"></div>
+  <div ref="containerRef" style="width: 100%; height: 500px;">
+    <div class="skeleton dark:bg-base-100 w-full h-[500px] skeletondark" v-if="!loaded"></div>
+  </div>
 </template>
