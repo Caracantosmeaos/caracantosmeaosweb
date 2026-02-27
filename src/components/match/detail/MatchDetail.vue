@@ -31,7 +31,7 @@
 <template>
     <div v-if="status==200" class="w-full">
         <div class="flex w-full  flex-col items-center justify-center align-middle" v-if="!isLoading">
-            <p class="w-full text-5xl md:text-6xl font-bold text-center" :class="resultColor">{{ reverseResult.get(match.result).toUpperCase() }}</p>
+            <p class="w-full text-5xl md:text-6xl font-bold text-center" :class="resultColor">{{ translateResult(match.result).toUpperCase() }}</p>
             <div class="items-center justify-center align-middle h-full w-full p-4 hidden md:flex">
                 <p class="text-end self-center font-medium text-2xl">{{match.localClub.name}}</p>
                 <p class="text-end font-extrabold text-4xl  ml-4">{{ match.localClub.matchStats.goals }}</p>
@@ -126,7 +126,7 @@
                             <p class="font-medium text-lg md:text-xl lg:text-2xl">({{ getSelectedPlayer().rating }})</p>
                             <div class="grid h-6 w-4 place-items-center bg-error rounded-sm self-center" v-if="getSelectedPlayer().redCards>0"></div>
                         </div>
-                        <p class="self-center text-lg font-light">{{ Position[getSelectedPlayer().position] }}</p>
+                        <p class="self-center text-lg font-light">{{ translatePosition(getSelectedPlayer().position) }}</p>
                         <div class="divider px-8 md:px-16 mb-1"></div>
                         <div class="relative overflow-hidden py-1 px-4 w-full rounded-lg my-1 text-center justify-center text-sm font-light">
                             <i>{{ getPlayerSummaryText(getSelectedPlayer()) }}</i>
@@ -188,9 +188,10 @@
 <script setup lang="ts">
     import { computed, onBeforeMount, ref, type Ref } from 'vue';
     import ClubMatchService from '@services/ClubMatchService';
-    import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
+    import ClubMatchEntity from '@models/match/ClubMatchEntity'
     import FootbalField from './FootbalField.vue';   
-    import  MatchPlayerEntity, {Position} from '@/model/match/MatchPlayerEntity';
+    import  MatchPlayerEntity from '@/model/match/MatchPlayerEntity';
+    import { translateResult, translatePosition } from '@/i18n/translations';
     import CountUp from 'vue-countup-v3'
 
     const props = defineProps<{
@@ -204,11 +205,7 @@
     const isLoading = matchService.isloading
     const status = matchService.getStatus()
 
-    const reverseResult = new Map<string, Result>();
-    Object.keys(Result).forEach((pos: Result) => {
-    const modeValue: string = Result[pos as any];
-    reverseResult.set(modeValue, pos);
-    });
+
 
     const matchType = {
         "league": "Liga",

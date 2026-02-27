@@ -103,7 +103,7 @@
 <script lang="ts" setup>
     import { onBeforeMount, type Ref, ref, computed, watch, type ComputedRef } from 'vue';
     import ClubMatchesService from '@services/ClubMatchesService';
-    import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
+    import ClubMatchEntity from '@models/match/ClubMatchEntity'
     import MatchField from './MatchField.vue';
     import ClubMembersService from '@services/ClubMembersService';
     import ClubMember from '@/model/ClubMemberEntity'

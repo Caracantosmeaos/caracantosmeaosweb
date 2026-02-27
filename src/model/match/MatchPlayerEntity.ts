@@ -19,27 +19,14 @@ export default class MatchPlayerEntity implements IMatchPlayer {
     tackleSuccessRate: number
 
 
-    public constructor(player: IMatchPlayer){
+    public constructor(player: IMatchPlayer) {
         Object.assign(this, player)
         //this.positionType = Position[this.position]
-        if(!(player instanceof MatchPlayerEntity)){
-            this.shotAccuracyPercent = (this.goals/this.shots) * 100
-            this.passSuccessRate = (this.passesSuccess/this.passesMade) * 100
-            this.tackleSuccessRate = (this.tacklesSuccess/this.tacklesMade) * 100
+        if (!(player instanceof MatchPlayerEntity)) {
+            this.shotAccuracyPercent = (this.goals / this.shots) * 100
+            this.passSuccessRate = (this.passesSuccess / this.passesMade) * 100
+            this.tackleSuccessRate = (this.tacklesSuccess / this.tacklesMade) * 100
         }
     }
 }
-export enum Position {
-    midfielder = "Centrocampista",
-    forward="Delantero",
-    defender="Defensa",
-    goalkeeper="Portero",
-}
 
-/*type Position = "midfielder" | "forward" | "defender" | "goalkeeper"
-let Position = {
-    Centrocampista: "midfielder",
-    Delantero: "forward",
-    Defensa: "defender",
-    Portero: "goalkeeper",
-}*/

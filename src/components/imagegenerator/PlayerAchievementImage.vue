@@ -16,7 +16,7 @@
             <img :src="'/players/' + player.playerName + '_full_transp.png'" class="absolute bottom-0 right-0 drop-shadow-2xl"  alt="Player ingame photo" @error="defaultFullImage"/>
             <div class="flex flex-col w-2/3 h-full justify-end mb-10">
                 <p class="text-primary text-7xl self-center font-semibold drop-shadow-xl">{{ player.playerName }}</p>
-                <p class="text-5xl self-center drop-shadow-lg">{{ player.favoritePositionEnum }}</p>
+                <p class="text-5xl self-center drop-shadow-lg">{{ translatePosition(player.favoritePositionEnum) }}</p>
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@ import { ref, type Ref, computed, onBeforeMount, type ComputedRef } from 'vue';
 import ClubMembersService from '@services/ClubMembersService';
 import ClubMemberEntity from '@/model/ClubMemberEntity'
 import type { IClubMemberAchievement } from '@/interfaces/clubMemberAchievement.interface';
-
+import { AchievementType, translatePosition } from '@/i18n/translations';
 const props = defineProps<{
         playerName: string,
         type: string,
@@ -47,14 +47,6 @@ const players:Ref<ClubMemberEntity[]> = memberService.getData()
 const isLoading = memberService.isloading
 const status = memberService.getStatus()
 
-enum AchievementType {
-    played = "partidos jugados",
-    goals="goles",
-    assists="asistencias",
-    redcards="tarjetas rojas",
-    passes="pases",
-    motm="mejor del partido"
-}
 
 onBeforeMount(async ()=>{
      await memberService.fetch()

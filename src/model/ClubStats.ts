@@ -1,43 +1,64 @@
-export default class ClubStats {
-    bestDivision: String
-    bestFinishGroup: number
-    gamesPlayed: number
-    gamesPlayedPlayoff: number
-    promotions: number
-    losses: number
-    ties: number
-    wins: number
-    winstreak: number
-    unbeatenstreak: number
-    skillRating: number
-    reputationtier: number
-    leagueAppearances: number
+import {
+    translateDivision,
+    translateFinishGroup,
+    translateReputation
+} from '@/i18n/translations';
+import type { IClub } from '@/interfaces/club.interface';
 
-    constructor(json: any){
-        this.bestDivision = Division[Number(json.bestDivision)]
-        this.bestFinishGroup = Number(json.bestFinishGroup)
-        this.gamesPlayed = Number(json.gamesPlayed)
-        this.gamesPlayedPlayoff = Number(json.gamesPlayedPlayoff)
-        this.promotions = Number(json.promotions)
-        this.losses = Number(json.losses)
-        this.ties = Number(json.ties)
-        this.wins = Number(json.wins)
-        this.winstreak = Number(json.wstreak)
-        this.unbeatenstreak = Number(json.unbeatenstreak)
-        this.skillRating = Number(json.skillRating)
-        this.reputationtier = Number(json.reputationtier)
-        this.leagueAppearances = Number(json.leagueAppearances)
+export default class ClubStats implements IClub {
+    clubId: number;
+    regionId: number;
+    name: string;
+    stats: {
+        bestDivision: number;
+        bestDivisionName: string;
+        bestFinishGroup: number;
+        bestFinishGroupName: string;
+        gamesPlayed: number;
+        gamesPlayedPlayoff: number;
+        gamesPlayedLeague: number;
+        goals: number;
+        goalsAgainst: number;
+        promotions: number;
+        relegations: number;
+        wins: number;
+        ties: number;
+        losses: number;
+        winstreak: number;
+        unbeatenstreak: number;
+        skill: number;
+        reputationtier: number;
+        reputationName: string;
+    };
+    updatedAt: string;
+
+    constructor(json: any) {
+        this.clubId = Number(json.clubId)
+        this.regionId = Number(json.regionId)
+        this.name = json.name
+        this.stats = {
+            bestDivision: Number(json.stats.bestDivision),
+            bestFinishGroup: Number(json.stats.bestFinishGroup),
+            bestDivisionName: translateDivision(Number(json.stats.bestDivision)),
+            bestFinishGroupName: translateFinishGroup(Number(json.stats.bestFinishGroup)),
+            gamesPlayed: Number(json.stats.gamesPlayed),
+            gamesPlayedPlayoff: Number(json.stats.gamesPlayedPlayoff),
+            gamesPlayedLeague: Number(json.stats.gamesPlayed) - Number(json.stats.gamesPlayedPlayoff),
+            goals: Number(json.stats.goals),
+            goalsAgainst: Number(json.stats.goalsAgainst),
+            promotions: Number(json.stats.promotions),
+            relegations: Number(json.stats.relegations),
+            wins: Number(json.stats.wins),
+            ties: Number(json.stats.ties),
+            losses: Number(json.stats.losses),
+            winstreak: Number(json.stats.winstreak),
+            unbeatenstreak: Number(json.stats.unbeatenstreak),
+            skill: Number(json.stats.skill),
+            reputationtier: Number(json.stats.reputationtier),
+            reputationName: translateReputation(Number(json.stats.reputationtier))
+        }
+        this.updatedAt = json.updatedAt
     }
-    
+
 
 }
-
-enum Division{
-    Elite=1,
-    Primera=2,
-    Segunda=3,
-    Tercera=4,
-    Cuarta=5,
-    Quinta=6
-}
-

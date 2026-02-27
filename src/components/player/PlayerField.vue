@@ -21,7 +21,7 @@
                 </svg>
                 </p>
                 <div role="contentinfo">
-                    <p class="text-secondary dark:text-primary font-semibold text-xl">{{ player.favoritePositionEnum }}</p>
+                    <p class="text-secondary dark:text-primary font-semibold text-xl">{{ translatePosition(player.favoritePositionEnum) }}</p>
                 </div>
                 <div class="plextrainfo-container " >
                     <div class="divider px-4 my-1"></div>
@@ -50,6 +50,7 @@
 <script setup lang="ts">
     import { computed, ref } from 'vue';
     import ClubMember from '@/model/ClubMemberEntity';
+    import { translatePosition } from '@/i18n/translations';
     const props = defineProps<{
         player: ClubMember,
         index: number

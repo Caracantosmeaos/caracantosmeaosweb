@@ -54,7 +54,7 @@
                     </div>
                     <div class="mt-3">
                         <span class=" px-3 justify-center"><strong>Filtrar por media mínima: </strong> <span class="text-lg">{{ overallFilter }}</span> </span>
-                        <input v-model="overallFilter" type="range" min="75" max="99"  class="range range-xs" />
+                        <input v-model="overallFilter" type="range" min="66" max="99"  class="range range-xs" />
                     </div>
                 </div>
             </aside>
@@ -87,7 +87,7 @@
                 <div v-else-if="finalMembers.length>0" class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3  content-center justify-center">
                     <PlayerDetailModal v-if="modalVisible" :player="detailedPlayer" @detailModalClosed="handleClosedModal" />
                     <TransitionGroup name="playerlist">
-                        <PlayerField v-for="(member, index) in finalMembers" :key="member" :player="member" :index="index" @clickedPlayer="handlePlayerClick"/>
+                        <PlayerField v-for="(member, index) in finalMembers" :key="member.playerName" :player="member" :index="index" @clickedPlayer="handlePlayerClick"/>
                     </TransitionGroup>
 			    </div>
                 <div v-else class="w-full">
@@ -190,7 +190,7 @@
         return posFilter
     })
 
-    const overallFilter = ref(75)
+    const overallFilter = ref(66)
 
     const preDetailedPL = ref(null)
     function handlePlayerClick(edata){

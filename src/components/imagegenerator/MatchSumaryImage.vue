@@ -2,7 +2,7 @@
     <div v-if="status==200">
         <div id="to_image" class="toimage flex w-full flex-initial overflow-hidden" v-if="!isLoading">
             <div class="w-7/12 flex-initial flex flex-col">
-                <p class="w-full text-9xl font-extrabold text-center" :class="resultColor">{{ reverseResult.get(match.result).toUpperCase() }}</p>
+                <p class="w-full text-9xl font-extrabold text-center" :class="resultColor">{{ translateResult(match.result).toUpperCase() }}</p>
                 <div class="mt-4 w-full flex-initial flex p-1 h-full flex-nowrap items-center justify-center place-content-evenly gap-0" :class="{'space-x-[-40px]': isAnyoneMvp}">
                     <div v-for="(p, index) in sortedPlayers" class="text-3xl text-center flex flex-initial flex-col justify-center items-center place-content-center"
                     >
@@ -133,7 +133,8 @@
 <script setup lang="ts">
 import { ref, type Ref, computed, onBeforeMount } from 'vue';
 import ClubMatchService from '@services/ClubMatchService';
-import ClubMatchEntity, {Result} from '@models/match/ClubMatchEntity'
+import ClubMatchEntity from '@models/match/ClubMatchEntity'
+import { translateResult } from '@/i18n/translations';
 
 const props = defineProps<{
         matchId: number
@@ -144,11 +145,7 @@ const match:Ref<ClubMatchEntity> = matchService.getData()
 const isLoading = matchService.isloading
 const status = matchService.getStatus()
 
-const reverseResult = new Map<string, Result>();
-Object.keys(Result).forEach((pos: Result) => {
-const modeValue: string = Result[pos as any];
-reverseResult.set(modeValue, pos);
-});
+
 
 const resultColor = computed((local?)=>{
     let resp = {

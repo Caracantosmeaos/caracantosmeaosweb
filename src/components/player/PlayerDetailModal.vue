@@ -2,6 +2,7 @@
     import { computed, onBeforeMount, onMounted, ref} from 'vue';
     import ClubMember from '@/model/ClubMemberEntity'
     import CountUp from 'vue-countup-v3'
+    import { translatePosition } from '@/i18n/translations';
     const dialog = ref<HTMLDialogElement>();
     const props = defineProps<{
         player: ClubMember
@@ -43,7 +44,7 @@
             </form>
             <header>
                 <h3 class="font-bold text-xl text-primary text-center">{{ player.playerName }} <span class="font-semibold text-lg text-base-content">({{ player.proName }})</span></h3>
-                <h4 class="text-md text-center">{{ player.favoritePositionEnum }} <span class="font-semibold">({{ player.proOverall }})</span></h4>
+                <h4 class="text-md text-center">{{ translatePosition(player.favoritePositionEnum) }} <span class="font-semibold">({{ player.proOverall }})</span></h4>
             </header>
             <section >
                 <div class="relative flex container w-full h-96  p-2 overflow-visible">
